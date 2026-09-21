@@ -1,0 +1,12 @@
+{
+  "name": "atlas",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": ["apps/web", "apps/api", "packages/shared"],
+  "scripts": {
+    "dev": "npm run dev -w @atlas/web",
+    "dev:web": "npm run dev -w @atlas/web",
+    "dev:api": "npm run dev -w @atlas/api",
+    "build": "npm run build -w @atlas/web"
+  }
+}

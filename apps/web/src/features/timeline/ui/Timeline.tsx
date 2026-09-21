@@ -119,7 +119,17 @@ export const TimelinePage = () => {
           <div className="shrink-0">
             <WeekStrip days={aroundToday} selected={selectedDate} onSelect={setSelectedDate} />
           </div>
-          <HourWheel key={selectedDate} ref={wheelRef} items={dayItems} isToday={isToday} now={now} />
+          <HourWheel
+            key={selectedDate}
+            ref={wheelRef}
+            items={dayItems}
+            isToday={isToday}
+            now={now}
+            dateKey={selectedDate}
+            onCreated={(item) => setItems((prev) => [...prev, item])}
+            onUpdated={(item) => setItems((prev) => prev.map((entry) => (entry.id === item.id ? item : entry)))}
+            onDeleted={(id) => setItems((prev) => prev.filter((entry) => entry.id !== id))}
+          />
         </div>
       ) : null}
 

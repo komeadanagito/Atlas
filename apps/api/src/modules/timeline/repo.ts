@@ -35,6 +35,21 @@ export const insertItem = (draft: TimelineDraft): TimelineItem => {
   return item;
 };
 
+export const updateItem = (id: string, draft: TimelineDraft): TimelineItem | null => {
+  const result = db
+    .prepare(
+      "UPDATE timeline_items SET start_at = ?, duration_min = ?, title = ?, note = ?, tag = ? WHERE id = ?",
+    )
+    .run(draft.startAt, draft.durationMin, draft.title, draft.note ?? null, draft.tag, id);
+  if (!Number(result.changes)) return null;
+  return { id, ...draft };
+};
+
+export const deleteItem = (id: string) => {
+  const result = db.prepare("DELETE FROM timeline_items WHERE id = ?").run(id);
+  return Number(result.changes) > 0;
+};
+
 export const clearItems = () => {
   db.exec("DELETE FROM timeline_items");
 };

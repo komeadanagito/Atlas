@@ -3,7 +3,7 @@ export const NAV = [
   { id: "kit", label: "百宝箱" },
 ] as const;
 
-export type SectionId = (typeof NAV)[number]["id"] | KitModuleId;
+export type SectionId = (typeof NAV)[number]["id"] | KitModuleId | "profile";
 
 export const KIT_MODULES = [
   { id: "fitness", label: "健身" },

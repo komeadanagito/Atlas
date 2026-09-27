@@ -23,3 +23,23 @@ export type TimelineDraft = {
   note?: string;
   tag: TimelineTag;
 };
+
+export type User = {
+  id: string;
+  username: string;
+  createdAt: string;
+};
+
+export type AuthResponse = {
+  user: User;
+};
+
+export type LoginPayload = {
+  username: string;
+  password: string;
+};
+
+export type RegisterPayload = {
+  username: string;
+  password: string;
+};

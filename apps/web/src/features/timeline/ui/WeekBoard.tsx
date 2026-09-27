@@ -11,37 +11,55 @@ type Props = {
 };
 
 export const WeekBoard = ({ days, items, selected, onSelect, onOpenDay }: Props) => (
-  <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-    <div className="grid min-w-[44rem] grid-cols-7 gap-2 sm:min-w-0">
+  <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0 soft-scroll pb-2">
+    <div className="grid min-w-[48rem] grid-cols-7 gap-2 sm:min-w-0 lg:gap-3">
       {days.map((day) => {
         const active = day.date === selected;
         const dayItems = itemsOn(items, day.date);
         return (
           <section
             key={day.date}
-            className={`min-w-0 rounded-2xl border px-2 py-3 duration-200 ${
-              active ? "border-[var(--accent)] bg-[var(--accent-soft)]/50 shadow-[var(--shadow)]" : "border-[var(--line)] hover:border-[var(--accent)]/35"
+            className={`flex min-w-0 flex-col justify-between rounded-xl p-4 min-h-[360px] sm:min-h-[420px] lg:min-h-[480px] transition-colors duration-200 ${
+              active
+                ? "bg-white ring-1 ring-[var(--ink)]/15"
+                : "bg-white ring-1 ring-[var(--line)] hover:ring-[var(--faint)]/30"
             }`}
           >
-            <button onClick={() => onSelect(day.date)} className="w-full text-left">
-              <p className="text-[11px] text-[var(--faint)]">{day.weekday}</p>
-              <p className="display mt-0.5 text-2xl leading-none">{day.dayOfMonth}</p>
-            </button>
-            <div className="mt-3 space-y-1.5">
-              {dayItems.length === 0 ? (
-                <p className="px-0.5 text-[11px] text-[var(--faint)]">无</p>
-              ) : (
-                dayItems.map((item) => <EventChip key={item.id} item={item} compact />)
-              )}
-            </div>
-            {dayItems.length > 0 ? (
-              <button
-                onClick={() => onOpenDay(day.date)}
-                className="mt-3 text-[11px] text-[var(--muted)] hover:text-[var(--ink)]"
-              >
-                看这一天
+            <div>
+              <button type="button" onClick={() => onSelect(day.date)} className="w-full text-left">
+                <p
+                  className={`text-[10px] font-normal uppercase tracking-wider ${
+                    active ? "text-[var(--ink)]" : day.isToday ? "text-[var(--ink)]" : "text-[var(--faint)]"
+                  }`}
+                >
+                  {day.weekday}
+                  {day.isToday ? " · 今天" : ""}
+                </p>
+                <p
+                  className={`display mt-1.5 text-2xl font-semibold leading-none tabular-nums tracking-tight ${
+                    active ? "text-[var(--ink)]" : "text-[var(--ink)]"
+                  }`}
+                >
+                  {day.dayOfMonth}
+                </p>
               </button>
-            ) : null}
+              <div className="mt-3 space-y-1.5 max-h-[260px] sm:max-h-[320px] overflow-y-auto soft-scroll pr-0.5">
+                {dayItems.length === 0 ? (
+                  <div className="rounded-lg py-4 text-center text-[11px] text-[var(--faint)]">
+                    无日程
+                  </div>
+                ) : (
+                  dayItems.map((item) => <EventChip key={item.id} item={item} compact />)
+                )}
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => onOpenDay(day.date)}
+              className="mt-3 w-full rounded-lg py-2 text-center text-xs font-normal text-[var(--muted)] transition-colors hover:bg-black/[0.04] hover:text-[var(--ink)]"
+            >
+              {dayItems.length > 0 ? "看这一天" : "添加日程"}
+            </button>
           </section>
         );
       })}

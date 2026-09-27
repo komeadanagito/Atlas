@@ -1,7 +1,7 @@
 import type { TimelineDraft, TimelineItem } from "@atlas/shared";
 import { deleteJson, getJson, patchJson, postJson } from "../../shared/api/client";
 
-export const listTimeline = () => getJson<TimelineItem[]>("/api/timeline");
+export const listTimeline = (signal?: AbortSignal) => getJson<TimelineItem[]>("/api/timeline", signal);
 
 export const createTimeline = (draft: TimelineDraft) =>
   postJson<TimelineItem>("/api/timeline", draft);

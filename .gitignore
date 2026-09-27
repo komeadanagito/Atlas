@@ -4,6 +4,10 @@ dist
 *.tsbuildinfo
 .env
 .env.*
+!.env.example
+.pnpm-store/
+__pycache__/
+*.pyc
 apps/api/data/*.sqlite
 apps/api/data/*.sqlite-*
 

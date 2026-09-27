@@ -1,3 +1,3 @@
 import { listItems } from "./repo";
 
-export const getTimeline = () => listItems();
+export const getTimeline = (userId: string) => listItems(userId);

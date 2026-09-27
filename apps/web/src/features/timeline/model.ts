@@ -45,9 +45,11 @@ export const weekdayOf = (dateKey: string) =>
   `周${WEEKDAYS[mondayIndex(parseDateKey(dateKey))]}`;
 
 export const addMinutesToClock = (iso: string, minutes: number) => {
-  const date = new Date(iso);
-  date.setMinutes(date.getMinutes() + minutes);
-  return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  const date = new Date(new Date(iso).getTime() + minutes * 60_000);
+  const clock = `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  return formatLocalDate(date) === formatDateKey(iso)
+    ? clock
+    : `${formatLocalDate(date)} ${clock}`;
 };
 
 export const itemsOn = (items: TimelineItem[], dateKey: string) =>

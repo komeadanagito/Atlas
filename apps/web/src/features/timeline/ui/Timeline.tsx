@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { TimelineItem } from "@atlas/shared";
 import { IconButton, IconNext, IconPrev, IconToday } from "../../../shared/ui/Icons";
 import { RangeSwitch, type TimeRange } from "../../../shared/ui/RangeSwitch";
-import { listTimeline } from "../api";
+import { useTimelineItems } from "../useTimelineItems";
 import {
   daysAround,
   itemsOn,
@@ -21,18 +20,12 @@ import { WeekBoard } from "./WeekBoard";
 import { WeekStrip } from "./WeekStrip";
 
 export const TimelinePage = () => {
-  const [items, setItems] = useState<TimelineItem[]>([]);
+  const { items, loading, error, retry, upsert, remove } = useTimelineItems();
   const [todayKey, setTodayKey] = useState(todayKeyOf);
   const [selectedDate, setSelectedDate] = useState(todayKey);
   const [range, setRange] = useState<TimeRange>("day");
   const [now, setNow] = useState(() => new Date());
   const wheelRef = useRef<HourWheelHandle>(null);
-
-  useEffect(() => {
-    listTimeline()
-      .then(setItems)
-      .catch(() => setItems([]));
-  }, []);
 
   useEffect(() => {
     const id = window.setInterval(() => {
@@ -44,7 +37,7 @@ export const TimelinePage = () => {
   }, []);
 
   const date = parseDateKey(selectedDate);
-  const aroundToday = useMemo(() => daysAround(todayKey, items, todayKey, 3), [todayKey, items]);
+  const aroundToday = useMemo(() => daysAround(selectedDate, items, todayKey, 3), [selectedDate, todayKey, items]);
   const week = useMemo(() => weekOf(selectedDate, items, todayKey), [selectedDate, items, todayKey]);
   const cells = useMemo(() => monthGrid(selectedDate, items, todayKey), [selectedDate, items, todayKey]);
   const dayItems = useMemo(() => itemsOn(items, selectedDate), [items, selectedDate]);
@@ -65,36 +58,42 @@ export const TimelinePage = () => {
 
   return (
     <main className="flex min-h-0 flex-1 flex-col gap-5">
-      <header className="flex shrink-0 flex-wrap items-end justify-between gap-3">
+      <header className="flex shrink-0 flex-wrap items-end justify-between gap-4 pb-1">
         <div>
           {range === "month" ? (
-            <>
-              <p className="display text-[1.35rem] leading-none">{date.getMonth() + 1}月</p>
-              <p className="mt-1 text-[11px] text-[var(--muted)]">{date.getFullYear()}</p>
-            </>
+            <div className="flex items-baseline gap-2.5">
+              <h1 className="display text-[2rem] leading-none sm:text-[2.25rem] font-semibold tracking-tight text-[var(--ink)]">
+                {date.getMonth() + 1}月
+              </h1>
+              <p className="text-xs font-normal text-[var(--faint)] tabular-nums">{date.getFullYear()}</p>
+            </div>
           ) : range === "week" ? (
-            <>
-              <p className="display text-[1.2rem] leading-none">{weekSpanLabel(selectedDate)}</p>
-              <p className="mt-1 text-[11px] text-[var(--muted)]">{weekCount} 项</p>
-            </>
+            <div>
+              <h1 className="display text-xl sm:text-2xl font-semibold tracking-tight text-[var(--ink)] text-balance">
+                {weekSpanLabel(selectedDate)}
+              </h1>
+              <p className="mt-1 text-xs font-normal text-[var(--faint)] tabular-nums">{weekCount} 项日程</p>
+            </div>
           ) : (
-            <div className="flex items-baseline gap-2">
-              <p className="display text-[1.5rem] leading-none tracking-tight">
+            <div className="flex items-baseline gap-3">
+              <span className="display text-[3rem] sm:text-[3.5rem] font-semibold leading-[0.9] tracking-tighter text-[var(--ink)] tabular-nums">
                 {String(date.getDate()).padStart(2, "0")}
-              </p>
-              <div>
-                <p className="text-[10px] tracking-[0.14em] text-[var(--muted)]">
-                  {date.getFullYear()} / {String(date.getMonth() + 1).padStart(2, "0")}
+              </span>
+              <div className="pb-1">
+                <p className="text-[11px] font-normal text-[var(--faint)] tabular-nums">
+                  {date.getFullYear()}年{date.getMonth() + 1}月
                 </p>
-                <p className="mt-0.5 text-[11px] text-[var(--muted)]">
-                  {isToday ? "今天" : weekdayOf(selectedDate)} · {dayItems.length} 项
+                <p className="mt-0.5 text-xs font-normal text-[var(--muted)]">
+                  {isToday ? "今天" : weekdayOf(selectedDate)}
+                  <span className="mx-1.5 text-[var(--faint)]">·</span>
+                  <span className="tabular-nums">{dayItems.length} 项</span>
                 </p>
               </div>
             </div>
           )}
         </div>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1">
           <IconButton
             label="回到今天"
             onClick={() => {
@@ -105,16 +104,26 @@ export const TimelinePage = () => {
             <IconToday />
           </IconButton>
           <RangeSwitch value={range} onChange={setRange} />
-          <IconButton label="上一段" onClick={() => move(-1)}>
-            <IconPrev />
-          </IconButton>
-          <IconButton label="下一段" onClick={() => move(1)}>
-            <IconNext />
-          </IconButton>
+          <div className="flex items-center">
+            <IconButton label="上一段" onClick={() => move(-1)}>
+              <IconPrev />
+            </IconButton>
+            <IconButton label="下一段" onClick={() => move(1)}>
+              <IconNext />
+            </IconButton>
+          </div>
         </div>
       </header>
 
-      {range === "day" ? (
+      {loading ? <p role="status" className="text-sm text-[var(--muted)]">正在加载日程…</p> : null}
+      {error ? (
+        <div role="alert" className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-[var(--danger-soft)] px-4 py-3 text-sm text-[var(--danger)]">
+          <span>{error}</span>
+          <button type="button" onClick={retry} disabled={loading} className="rounded-lg px-3 py-2 font-medium underline underline-offset-4 disabled:opacity-50">重新加载</button>
+        </div>
+      ) : null}
+
+      {range === "day" && (!loading || items.length > 0) && (!error || items.length > 0) ? (
         <div key="day" className="rise flex min-h-0 flex-1 flex-col gap-5">
           <div className="shrink-0">
             <WeekStrip days={aroundToday} selected={selectedDate} onSelect={setSelectedDate} />
@@ -126,14 +135,14 @@ export const TimelinePage = () => {
             isToday={isToday}
             now={now}
             dateKey={selectedDate}
-            onCreated={(item) => setItems((prev) => [...prev, item])}
-            onUpdated={(item) => setItems((prev) => prev.map((entry) => (entry.id === item.id ? item : entry)))}
-            onDeleted={(id) => setItems((prev) => prev.filter((entry) => entry.id !== id))}
+            onCreated={upsert}
+            onUpdated={upsert}
+            onDeleted={remove}
           />
         </div>
       ) : null}
 
-      {range === "week" ? (
+      {range === "week" && (!loading || items.length > 0) && (!error || items.length > 0) ? (
         <div key="week" className="rise min-h-0 flex-1 overflow-y-auto pt-2 soft-scroll">
           <WeekBoard
             days={week}
@@ -145,7 +154,7 @@ export const TimelinePage = () => {
         </div>
       ) : null}
 
-      {range === "month" ? (
+      {range === "month" && (!loading || items.length > 0) && (!error || items.length > 0) ? (
         <div key="month" className="rise min-h-0 flex-1 overflow-y-auto pt-1 soft-scroll">
           <p className="mb-3 text-[12px] text-[var(--muted)]">本月 {monthCount} 项</p>
           <MonthBoard

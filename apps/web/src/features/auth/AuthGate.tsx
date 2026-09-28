@@ -1,11 +1,145 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
+import "@fontsource/pinyon-script/400.css";
+import "@fontsource/cormorant-garamond/400-italic.css";
+import {
+  ArrowRight,
+  CircleNotch,
+  Eye,
+  EyeSlash,
+  LockSimple,
+  ShieldCheck,
+  User,
+  WarningCircle,
+  type Icon,
+} from "@phosphor-icons/react";
 import { useAuth } from "./AuthContext";
 import logo from "../../assets/atlas-logo.png";
-import { IconArrowRight, IconEye, IconEyeSlash, IconLock, IconShieldCheck, IconUser } from "../../shared/ui/Icons";
+
+type Mode = "login" | "register";
+
+const COPY = {
+  login: {
+    tab: "登录",
+    motto: "Bon retour — le temps vous attend.",
+    submit: "立即登录",
+    pending: "正在登录…",
+    switchHint: "还没有账户？",
+    switchAction: "免费注册",
+  },
+  register: {
+    tab: "注册",
+    motto: "Chaque heure mérite son histoire.",
+    submit: "创建账户",
+    pending: "正在创建账户…",
+    switchHint: "已有账户？",
+    switchAction: "直接登录",
+  },
+} as const satisfies Record<Mode, Record<string, string>>;
+
+const MODES: readonly Mode[] = ["login", "register"];
+
+const Glyph = ({ as: G, className = "h-[18px] w-[18px]" }: { as: Icon; className?: string }) => (
+  <G className={className} weight="light" aria-hidden="true" focusable="false" />
+);
+
+/** Staggered page entrance delay for `.auth-enter`; `step` orders the reveal. */
+const enter = (step: number) => ({ "--d": `${80 + step * 70}ms` }) as CSSProperties;
+
+const SWAP_BASE = "col-start-1 row-start-1 transition-[opacity,transform,filter] duration-[420ms] ease-[var(--ease)]";
+const SWAP_ON = "opacity-100 translate-y-0 blur-[0px]";
+const SWAP_OFF = "pointer-events-none opacity-0 translate-y-1.5 blur-[3px]";
+
+/**
+ * Renders both modes in one grid cell so the slot always takes the height of the larger view:
+ * switching tabs cross-fades content without resizing the layout.
+ */
+const Swap = ({ mode, render, className = "" }: { mode: Mode; render: (m: Mode) => ReactNode; className?: string }) => (
+  <div className={`grid ${className}`}>
+    {MODES.map((m) => (
+      <div
+        key={m}
+        aria-hidden={m !== mode}
+        inert={m !== mode}
+        className={`${SWAP_BASE} ${m === mode ? SWAP_ON : SWAP_OFF}`}
+      >
+        {render(m)}
+      </div>
+    ))}
+  </div>
+);
+
+type FieldProps = {
+  id: string;
+  name: string;
+  label: string;
+  icon: Icon;
+  value: string;
+  onChange: (value: string) => void;
+  disabled: boolean;
+  autoComplete: string;
+  minLength?: number;
+  maxLength: number;
+  autoFocus?: boolean;
+  reveal?: { shown: boolean; toggle: () => void; showLabel: string; hideLabel: string };
+};
+
+/** Underline field: a hairline at rest, an ink line drawn from the left on focus. */
+const Field = ({ id, label, icon, value, onChange, reveal, ...input }: FieldProps) => (
+  <div className="group">
+    <label
+      htmlFor={id}
+      className="block text-[11px] font-medium tracking-[0.08em] text-zinc-500 transition-colors duration-300 group-focus-within:text-[var(--ink)]"
+    >
+      {label}
+    </label>
+    <div className="relative flex items-center">
+      <span className="pointer-events-none absolute left-0 text-zinc-400 transition-colors duration-300 group-focus-within:text-[var(--ink)]">
+        <Glyph as={icon} />
+      </span>
+      <input
+        id={id}
+        type={reveal && !reveal.shown ? "password" : "text"}
+        required
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={`auth-input h-12 w-full border-0 bg-transparent pl-8 text-[15px] text-[var(--ink)] focus:outline-none disabled:opacity-50 ${
+          reveal ? "pr-10" : "pr-0"
+        }`}
+        {...input}
+      />
+      {reveal && (
+        <button
+          type="button"
+          tabIndex={-1}
+          disabled={input.disabled}
+          aria-label={reveal.shown ? reveal.hideLabel : reveal.showLabel}
+          onClick={reveal.toggle}
+          className="absolute right-0 grid h-8 w-8 place-items-center rounded-full text-zinc-400 hover:text-[var(--ink)] disabled:opacity-50"
+        >
+          {[false, true].map((shown) => (
+            <span
+              key={String(shown)}
+              className={`col-start-1 row-start-1 transition-[opacity,transform] duration-300 ease-[var(--ease)] ${
+                reveal.shown === shown ? "scale-100 opacity-100" : "scale-75 opacity-0"
+              }`}
+            >
+              <Glyph as={shown ? EyeSlash : Eye} />
+            </span>
+          ))}
+        </button>
+      )}
+      <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-zinc-200" />
+      <span
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-[var(--ink)] transition-transform duration-500 ease-[var(--ease)] group-focus-within:scale-x-100"
+      />
+    </div>
+  </div>
+);
 
 export const AuthGate = () => {
   const { login, register } = useAuth();
-  const [tab, setTab] = useState<"login" | "register">("login");
+  const [tab, setTab] = useState<Mode>("login");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -51,7 +185,7 @@ export const AuthGate = () => {
     }
   }
 
-  function changeTab(next: "login" | "register") {
+  function changeTab(next: Mode) {
     if (submitting || next === tab) return;
     setTab(next);
     setPassword("");
@@ -61,241 +195,189 @@ export const AuthGate = () => {
     setShowConfirm(false);
   }
 
+  const copy = COPY[tab];
+
   return (
-    <main className="relative flex min-h-dvh w-full items-center justify-center overflow-x-hidden bg-[var(--wash)] px-4 py-12 selection:bg-zinc-200">
-      {/* 极简柔和背景微光与网格底纹 */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div className="absolute -top-32 left-1/2 -translate-x-1/2 h-[520px] w-[680px] rounded-full bg-gradient-to-b from-zinc-200/50 via-zinc-100/30 to-transparent blur-3xl" />
-        <div className="absolute inset-0 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:24px_24px] opacity-35" />
-      </div>
+    <main className="soft-scroll relative h-dvh w-full overflow-y-auto overflow-x-hidden bg-white selection:bg-[var(--ink)] selection:text-white">
+      <img
+        src={logo}
+        alt="Atlas"
+        draggable={false}
+        style={enter(0)}
+        className="auth-enter absolute left-5 top-5 z-10 h-7 w-auto select-none object-contain sm:left-8 sm:top-7 sm:h-8"
+      />
 
-      <div className="relative w-full max-w-[420px]">
-        {/* 品牌标识与标语 */}
-        <header className="mb-7 flex flex-col items-center text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white border border-black/[0.08] shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-transform duration-300 hover:scale-105">
-            <img src={logo} alt="Atlas" className="h-8 w-8 select-none object-contain" />
-          </div>
-          <h1 className="mt-4 text-2xl font-bold tracking-tight text-[var(--ink)]">Atlas</h1>
-          <p className="mt-1.5 text-xs text-[var(--muted)]">
-            {tab === "login" ? "登录你的账户，掌控属于自己的时间秩序" : "创建你的账户，开启专注与高效日程"}
-          </p>
-        </header>
+      <div className="relative flex min-h-full items-center justify-center px-6 pb-12 pt-24 sm:py-16">
+        <div className="w-full max-w-[360px]">
+          <header className="mb-10 text-center">
+            <h1 style={enter(1)} className="auth-enter font-script text-[68px] leading-[1.1] text-[var(--ink)] sm:text-[80px]">
+              Atlas
+            </h1>
+            <div style={enter(2)} className="auth-enter">
+              <Swap
+                mode={tab}
+                className="mt-1"
+                render={(m) => (
+                  <p lang="fr" className="font-serif-fr text-[17px] italic text-zinc-500">
+                    {COPY[m].motto}
+                  </p>
+                )}
+              />
+            </div>
+          </header>
 
-        {/* 认证卡片主体 */}
-        <div className="rounded-2xl border border-black/[0.08] bg-white p-7 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.06)] sm:p-8">
-          {/* 模式分段选择器 */}
-          <nav
-            aria-label="账户入口"
-            className="relative mb-6 grid grid-cols-2 rounded-xl bg-black/[0.04] p-1 text-sm font-medium"
-          >
-            <button
-              type="button"
-              disabled={submitting}
-              onClick={() => changeTab("login")}
-              aria-pressed={tab === "login"}
-              className={`relative z-10 flex h-9 items-center justify-center rounded-lg transition-all duration-200 ${
-                tab === "login"
-                  ? "bg-white text-[var(--ink)] font-semibold shadow-xs"
-                  : "text-[var(--muted)] hover:text-[var(--ink)]"
+          <nav style={enter(3)} aria-label="账户入口" className="auth-enter relative mb-9 grid grid-cols-2 text-sm">
+            <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-zinc-100" />
+            <span
+              aria-hidden="true"
+              className={`absolute bottom-0 left-0 h-px w-1/2 bg-[var(--ink)] transition-transform duration-500 ease-[var(--ease)] ${
+                tab === "register" ? "translate-x-full" : "translate-x-0"
               }`}
-            >
-              登录
-            </button>
-            <button
-              type="button"
-              disabled={submitting}
-              onClick={() => changeTab("register")}
-              aria-pressed={tab === "register"}
-              className={`relative z-10 flex h-9 items-center justify-center rounded-lg transition-all duration-200 ${
-                tab === "register"
-                  ? "bg-white text-[var(--ink)] font-semibold shadow-xs"
-                  : "text-[var(--muted)] hover:text-[var(--ink)]"
-              }`}
-            >
-              注册
-            </button>
+            />
+            {MODES.map((m) => (
+              <button
+                key={m}
+                type="button"
+                disabled={submitting}
+                onClick={() => changeTab(m)}
+                aria-pressed={tab === m}
+                className={`h-10 font-medium tracking-[0.12em] ${
+                  tab === m ? "text-[var(--ink)]" : "text-zinc-500 hover:text-[var(--ink)]"
+                }`}
+              >
+                {COPY[m].tab}
+              </button>
+            ))}
           </nav>
 
-          {/* 表单内容 */}
-          <form onSubmit={handleSubmit} className="space-y-4" aria-busy={submitting}>
-            {/* 用户名字段 */}
-            <div className="space-y-1.5">
-              <label htmlFor="auth-username" className="block text-xs font-medium text-[var(--ink)]">
-                用户名
-              </label>
-              <div className="relative flex items-center">
-                <span className="pointer-events-none absolute left-3 text-[var(--faint)]">
-                  <IconUser className="h-4 w-4" />
-                </span>
-                <input
-                  id="auth-username"
-                  name="username"
-                  type="text"
-                  autoComplete="username"
-                  required
-                  autoFocus
-                  minLength={2}
-                  maxLength={30}
-                  placeholder="请输入用户名"
-                  value={username}
-                  disabled={submitting}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="w-full rounded-xl border border-zinc-200 bg-zinc-50/60 py-2.5 pr-3.5 pl-9 text-sm text-[var(--ink)] placeholder:text-[var(--faint)] transition-all duration-200 focus:border-[var(--ink)] focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/5 disabled:opacity-50"
-                />
-              </div>
+          <form onSubmit={handleSubmit} className="space-y-6" aria-busy={submitting}>
+            <div style={enter(4)} className="auth-enter">
+              <Field
+                id="auth-username"
+                name="username"
+                label="用户名"
+                icon={User}
+                autoComplete="username"
+                autoFocus
+                minLength={2}
+                maxLength={30}
+                value={username}
+                disabled={submitting}
+                onChange={setUsername}
+              />
             </div>
 
-            {/* 密码字段 */}
-            <div className="space-y-1.5">
-              <label htmlFor="auth-password" className="block text-xs font-medium text-[var(--ink)]">
-                密码
-              </label>
-              <div className="relative flex items-center">
-                <span className="pointer-events-none absolute left-3 text-[var(--faint)]">
-                  <IconLock className="h-4 w-4" />
-                </span>
-                <input
-                  id="auth-password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  autoComplete={tab === "login" ? "current-password" : "new-password"}
-                  required
-                  minLength={8}
-                  maxLength={128}
-                  placeholder="至少 8 位字符"
-                  value={password}
-                  disabled={submitting}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-xl border border-zinc-200 bg-zinc-50/60 py-2.5 pr-10 pl-9 text-sm text-[var(--ink)] placeholder:text-[var(--faint)] transition-all duration-200 focus:border-[var(--ink)] focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/5 disabled:opacity-50"
-                />
-                <button
-                  type="button"
-                  tabIndex={-1}
-                  disabled={submitting}
-                  aria-label={showPassword ? "隐藏密码" : "显示密码"}
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-2.5 flex h-7 w-7 items-center justify-center rounded-lg text-[var(--faint)] transition-colors hover:text-[var(--ink)] disabled:opacity-50"
-                >
-                  {showPassword ? <IconEyeSlash className="h-4 w-4" /> : <IconEye className="h-4 w-4" />}
-                </button>
-              </div>
+            <div style={enter(5)} className="auth-enter">
+              <Field
+                id="auth-password"
+                name="password"
+                label="密码"
+                icon={LockSimple}
+                autoComplete={tab === "login" ? "current-password" : "new-password"}
+                minLength={8}
+                maxLength={128}
+                value={password}
+                disabled={submitting}
+                onChange={setPassword}
+                reveal={{
+                  shown: showPassword,
+                  toggle: () => setShowPassword((v) => !v),
+                  showLabel: "显示密码",
+                  hideLabel: "隐藏密码",
+                }}
+              />
             </div>
 
-            {/* 确认密码字段（仅在注册时展示） */}
-            {tab === "register" && (
-              <div className="space-y-1.5 animate-in fade-in slide-in-from-top-1 duration-200">
-                <label htmlFor="auth-confirm" className="block text-xs font-medium text-[var(--ink)]">
-                  确认密码
-                </label>
-                <div className="relative flex items-center">
-                  <span className="pointer-events-none absolute left-3 text-[var(--faint)]">
-                    <IconShieldCheck className="h-4 w-4" />
-                  </span>
-                  <input
-                    id="auth-confirm"
-                    name="confirm"
-                    type={showConfirm ? "text" : "password"}
-                    autoComplete="new-password"
-                    required
-                    maxLength={128}
-                    placeholder="再次输入密码"
-                    value={confirm}
-                    disabled={submitting}
-                    onChange={(e) => setConfirm(e.target.value)}
-                    className="w-full rounded-xl border border-zinc-200 bg-zinc-50/60 py-2.5 pr-10 pl-9 text-sm text-[var(--ink)] placeholder:text-[var(--faint)] transition-all duration-200 focus:border-[var(--ink)] focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/5 disabled:opacity-50"
-                  />
-                  <button
-                    type="button"
-                    tabIndex={-1}
-                    disabled={submitting}
-                    aria-label={showConfirm ? "隐藏确认密码" : "显示确认密码"}
-                    onClick={() => setShowConfirm(!showConfirm)}
-                    className="absolute right-2.5 flex h-7 w-7 items-center justify-center rounded-lg text-[var(--faint)] transition-colors hover:text-[var(--ink)] disabled:opacity-50"
-                  >
-                    {showConfirm ? <IconEyeSlash className="h-4 w-4" /> : <IconEye className="h-4 w-4" />}
-                  </button>
-                </div>
-              </div>
-            )}
+            <div style={enter(6)} className="auth-enter">
+              <Swap
+                mode={tab}
+                render={(m) =>
+                  m === "register" ? (
+                    <Field
+                      id="auth-confirm"
+                      name="confirm"
+                      label="确认密码"
+                      icon={ShieldCheck}
+                      autoComplete="new-password"
+                      maxLength={128}
+                      value={confirm}
+                      disabled={submitting || tab !== "register"}
+                      onChange={setConfirm}
+                      reveal={{
+                        shown: showConfirm,
+                        toggle: () => setShowConfirm((v) => !v),
+                        showLabel: "显示确认密码",
+                        hideLabel: "隐藏确认密码",
+                      }}
+                    />
+                  ) : (
+                    <p lang="fr" className="flex h-full items-center justify-center font-serif-fr text-[15px] italic text-zinc-500">
+                      Le temps est à vous.
+                    </p>
+                  )
+                }
+              />
+            </div>
 
-            {/* 错误提示横幅 */}
             {error && (
-              <div
-                role="alert"
-                className="flex items-center gap-2 rounded-xl bg-rose-50 px-3.5 py-2.5 text-xs font-medium text-rose-700 border border-rose-100"
-              >
-                <svg className="h-4 w-4 shrink-0 text-rose-500" viewBox="0 0 20 20" fill="currentColor">
-                  <path
-                    fillRule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+              <div role="alert" className="label-in flex items-center gap-2 text-xs font-medium text-rose-600">
+                <Glyph as={WarningCircle} className="h-4 w-4 shrink-0" />
                 <span>{error}</span>
               </div>
             )}
 
-            {/* 提交主操作按钮 */}
-            <button
-              type="submit"
-              disabled={submitting}
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--ink)] py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-zinc-800 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              {submitting ? (
-                <>
-                  <svg className="h-4 w-4 animate-spin text-white" viewBox="0 0 24 24" fill="none">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
-                  </svg>
-                  <span>{tab === "login" ? "正在登录…" : "正在创建账户…"}</span>
-                </>
-              ) : (
-                <>
-                  <span>{tab === "login" ? "立即登录" : "创建账户"}</span>
-                  <IconArrowRight className="h-4 w-4" />
-                </>
-              )}
-            </button>
+            <div style={enter(7)} className="auth-enter pt-2">
+              <button
+                type="submit"
+                disabled={submitting}
+                className="group relative flex h-12 w-full items-center justify-center overflow-hidden rounded-full bg-[var(--ink)] text-sm font-medium tracking-[0.08em] text-white hover:bg-black hover:shadow-[0_10px_24px_-12px_rgba(17,19,24,0.55)] active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                <span key={`${tab}-${submitting}`} className="label-in flex items-center gap-2">
+                  {submitting ? (
+                    <>
+                      <Glyph as={CircleNotch} className="h-4 w-4 animate-spin" />
+                      {copy.pending}
+                    </>
+                  ) : (
+                    <>
+                      {copy.submit}
+                      <span className="grid w-0 overflow-hidden opacity-0 transition-[width,opacity] duration-300 ease-[var(--ease)] group-hover:w-4 group-hover:opacity-100">
+                        <Glyph as={ArrowRight} className="h-4 w-4" />
+                      </span>
+                    </>
+                  )}
+                </span>
+              </button>
+            </div>
           </form>
 
-          {/* 模式底部快捷切换 */}
-          <div className="mt-6 border-t border-zinc-100 pt-5 text-center">
-            {tab === "login" ? (
-              <p className="text-xs text-[var(--muted)]">
-                还没有账户？{" "}
-                <button
-                  type="button"
-                  disabled={submitting}
-                  onClick={() => changeTab("register")}
-                  className="font-medium text-[var(--ink)] underline underline-offset-4 hover:opacity-80"
-                >
-                  免费注册
-                </button>
-              </p>
-            ) : (
-              <p className="text-xs text-[var(--muted)]">
-                已有账户？{" "}
-                <button
-                  type="button"
-                  disabled={submitting}
-                  onClick={() => changeTab("login")}
-                  className="font-medium text-[var(--ink)] underline underline-offset-4 hover:opacity-80"
-                >
-                  直接登录
-                </button>
-              </p>
-            )}
+          <div style={enter(8)} className="auth-enter">
+            <Swap
+              mode={tab}
+              className="mt-8 text-center"
+              render={(m) => {
+                const other: Mode = m === "login" ? "register" : "login";
+                return (
+                  <p className="text-xs text-zinc-500">
+                    {COPY[m].switchHint}{" "}
+                    <button
+                      type="button"
+                      disabled={submitting}
+                      onClick={() => changeTab(other)}
+                      className="font-medium text-[var(--ink)] underline decoration-zinc-300 underline-offset-4 hover:decoration-[var(--ink)]"
+                    >
+                      {COPY[m].switchAction}
+                    </button>
+                  </p>
+                );
+              }}
+            />
           </div>
-        </div>
 
-        {/* 底部信任与质感签名 */}
-        <footer className="mt-8 text-center text-xs tracking-wider text-[var(--faint)]">
-          ATLAS · 个人专注与时间管理
-        </footer>
+          <footer style={enter(9)} lang="fr" className="auth-enter font-serif-fr mt-14 text-center text-[15px] italic text-zinc-500">
+            Atlas — l’art de tenir ses heures
+          </footer>
+        </div>
       </div>
     </main>
   );

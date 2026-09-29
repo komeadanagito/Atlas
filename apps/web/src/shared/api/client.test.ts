@@ -4,9 +4,21 @@ import { fetchMeApi, getJson, loginApi, logoutApi } from "./client";
 afterEach(() => vi.unstubAllGlobals());
 const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), {status, headers:{"Content-Type":"application/json"}});
 it("distinguishes no session from an unavailable service", async () => {
-  vi.stubGlobal("fetch",vi.fn().mockResolvedValueOnce(json({},401)).mockResolvedValueOnce(json({},503)));
+  vi.stubGlobal("fetch",vi.fn().mockResolvedValueOnce(json({},401)).mockResolvedValue(json({},503)));
   expect(await fetchMeApi()).toBeNull();
   await expect(fetchMeApi()).rejects.toMatchObject({status:503});
+});
+it("retries a read once after a transient failure", async () => {
+  const fetchMock=vi.fn().mockRejectedValueOnce(new TypeError("Failed to fetch")).mockResolvedValueOnce(json([{id:"a"}]));
+  vi.stubGlobal("fetch",fetchMock);
+  await expect(getJson("/api/timeline")).resolves.toEqual([{id:"a"}]);
+  expect(fetchMock).toHaveBeenCalledTimes(2);
+});
+it("does not retry client errors", async () => {
+  const fetchMock=vi.fn().mockResolvedValue(json({error:"bad"},400));
+  vi.stubGlobal("fetch",fetchMock);
+  await expect(getJson("/api/timeline")).rejects.toThrow("bad");
+  expect(fetchMock).toHaveBeenCalledTimes(1);
 });
 it("does not broadcast expiry for a wrong login password", async () => {
   const expired=vi.fn(); window.addEventListener("atlas:unauthorized",expired);

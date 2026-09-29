@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import {
+  Activity,
   ArrowRight,
   BookOpen,
   CalendarDays,
@@ -9,7 +10,6 @@ import {
   ChevronRight,
   CircleCheck,
   Clock,
-  Dumbbell,
   Eye,
   EyeOff,
   LibraryBig,
@@ -58,7 +58,7 @@ export const IconUndo = wrapIcon(RotateCcw);
 export const IconCaretDown = wrapIcon(ChevronDown);
 export const IconPrev = wrapIcon(ChevronLeft);
 export const IconNext = wrapIcon(ChevronRight);
-export const IconFitness = wrapIcon(Dumbbell);
+export const IconFitness = wrapIcon(Activity);
 export const IconLearning = wrapIcon(BookOpen);
 export const IconDaily = wrapIcon(NotebookPen);
 export const IconKnowledge = wrapIcon(LibraryBig);

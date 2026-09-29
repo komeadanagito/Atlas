@@ -10,6 +10,7 @@ __pycache__/
 *.pyc
 apps/api/data/*.sqlite
 apps/api/data/*.sqlite-*
+supabase/.temp/
 
 # impeccable-ignore-start
 # Ephemeral output, runtime state, and per-dev overrides.

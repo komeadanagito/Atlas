@@ -6,7 +6,7 @@ export const NAV = [
 export type SectionId = (typeof NAV)[number]["id"] | KitModuleId | "profile";
 
 export const KIT_MODULES = [
-  { id: "fitness", label: "健身" },
+  { id: "fitness", label: "运动" },
   { id: "learning", label: "学习" },
   { id: "daily", label: "日常记录" },
   { id: "knowledge", label: "知识库" },

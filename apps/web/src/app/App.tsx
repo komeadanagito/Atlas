@@ -6,6 +6,7 @@ import { AuthGate } from "../features/auth/AuthGate";
 import { AuthModal } from "../features/auth/AuthModal";
 import { ProfilePage } from "../features/auth/ProfilePage";
 import { KitHub } from "../features/kit/KitHub";
+import { MovementBrowser } from "../features/kit/MovementBrowser";
 import { Placeholder } from "../features/kit/Placeholder";
 import { TimelinePage } from "../features/timeline/ui/Timeline";
 
@@ -14,7 +15,7 @@ const AppContent = () => {
   const [section, setSection] = useState<SectionId>("timeline");
   const navActive = section === "timeline" ? "timeline" : section === "profile" ? "profile" : "kit";
 
-  if (typeof window !== "undefined" && window.location.search.includes("preview=auth")) {
+  if (!user && typeof window !== "undefined" && window.location.search.includes("preview=auth")) {
     return <AuthGate />;
   }
 
@@ -41,13 +42,20 @@ const AppContent = () => {
               </div>
             ) : null}
             {isKitModule(section) ? (
-              <div className="min-h-0 flex-1 overflow-y-auto soft-scroll">
-                <Placeholder id={section} onBack={() => setSection("kit")} />
-              </div>
+              section === "fitness" ? (
+                // Bleed into the page padding so rings/shadows on the right edge are not clipped.
+                <div className="-mx-4 -mb-2 -mt-2 min-h-0 flex-1 overflow-hidden px-4 pb-2 pt-1 sm:-mt-4">
+                  <MovementBrowser onBack={() => setSection("kit")} />
+                </div>
+              ) : (
+                <div className="min-h-0 flex-1 overflow-y-auto soft-scroll">
+                  <Placeholder id={section} onBack={() => setSection("kit")} />
+                </div>
+              )
             ) : null}
           </>
         ) : (
-          <div className="flex min-h-0 flex-1 flex-col overflow-y-auto soft-scroll">
+          <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
             <AuthGate />
           </div>
         )}

@@ -16,7 +16,10 @@ const Credentials = () => {
     if (tab === "register" && password !== confirm) { setError("两次输入的密码不一致"); return; }
     setSaving(true); setError("");
     try { await (tab === "login" ? login : register)(username.trim(), password); }
-    catch (reason) { setError(reason instanceof Error ? reason.message : "连接失败，请重试"); }
+    catch (reason) {
+      const raw = reason instanceof Error ? reason.message : "连接失败，请重试";
+      setError(raw === "Failed to fetch" ? "无法连接到服务器，请检查后端服务是否已启动" : raw);
+    }
     finally { setSaving(false); }
   };
   return <>

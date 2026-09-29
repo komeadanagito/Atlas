@@ -4,12 +4,11 @@
 
 ## 开发
 
-需要 Node.js 22.15+、npm，以及 PostgreSQL 17+（或 Docker Compose）。
+需要 Node.js 22.15+、npm，以及 PostgreSQL 17+（如 Supabase）。
 
-1. 将根目录 `.env.example` 复制为 `.env`，设置私人 `POSTGRES_PASSWORD` 和对应 `DATABASE_URL`，URL 中密码需转义。不要提交真实凭据。
+1. 将根目录 `.env.example` 复制为 `.env`，设置数据库连接串 `DATABASE_URL`。不要提交真实凭据。
 2. 执行 `npm install`。
-3. 执行 `docker compose up -d postgres`；已有 PostgreSQL 实例则直接配置连接串，目标数据库应为空库。
-4. 分别执行 `npm run dev:api` 和 `npm run dev:web`，打开 `http://localhost:5173`。Vite 的 `/api` 代理保持浏览器请求同源。
+3. 分别执行 `npm run dev:api` 和 `npm run dev:web`，打开 `http://localhost:5173`。Vite 的 `/api` 代理保持浏览器请求同源。
 
 API 启动时检查连接并创建 PostgreSQL 表，数据库不可用则退出，不会回退到 SQLite。
 旧 `apps/api/data/` SQLite 文件及附属文件保持原样，不读取、不导入、不删除。旧账号不迁移，请重新注册；不再预置演示管理员。
@@ -26,7 +25,7 @@ API 启动时检查连接并创建 PostgreSQL 表，数据库不可用则退出�
 
 设置 `NODE_ENV=production` 和 HTTPS `APP_ORIGIN`，在同一站点反代 `/api` 到 API。生产 Cookie 使用 Secure。
 写请求必须携带匹配 `APP_ORIGIN` 的 Origin；不支持任意跨域前端，不开放 wildcard CORS。开发额外允许 `http://127.0.0.1:5173`。
-PostgreSQL 使用独立账号、最小权限及定期备份。不要执行 `docker compose down -v`，它会删除数据库持久卷。
+PostgreSQL 使用独立账号、最小权限及定期备份。
 
 ## 验证
 

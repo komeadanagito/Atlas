@@ -16,7 +16,22 @@ const request = async <T>(path: string, method = "GET", body?: unknown, signal?:
   return data as T;
 };
 export const postJson = <T>(path: string, body: unknown) => request<T>(path, "POST", body);
-export const getJson = <T>(path: string, signal?: AbortSignal) => request<T>(path, "GET", undefined, signal);
+const isRetryable = (error: unknown) =>
+  error instanceof TypeError || (error instanceof ApiError && error.status >= 500);
+const pause = (ms: number, signal?: AbortSignal) => new Promise<void>((resolve, reject) => {
+  if (signal?.aborted) return reject(signal.reason);
+  const timer = setTimeout(resolve, ms);
+  signal?.addEventListener("abort", () => { clearTimeout(timer); reject(signal.reason); }, { once: true });
+});
+// Reads are idempotent, so ride out a brief network/DB hiccup with one quiet retry.
+export const getJson = async <T>(path: string, signal?: AbortSignal): Promise<T> => {
+  try { return await request<T>(path, "GET", undefined, signal); }
+  catch (error) {
+    if (signal?.aborted || !isRetryable(error)) throw error;
+    await pause(600, signal);
+    return request<T>(path, "GET", undefined, signal);
+  }
+};
 export const patchJson = <T>(path: string, body: unknown) => request<T>(path, "PATCH", body);
 export const deleteJson = <T>(path: string) => request<T>(path, "DELETE");
 export const loginApi = (payload: LoginPayload) => postJson<AuthResponse>("/api/auth/login", payload);

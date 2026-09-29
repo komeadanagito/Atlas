@@ -11,8 +11,9 @@ type Props = {
 
 type PillBox = { x: number; width: number };
 
+// Smooth deceleration, no overshoot: the pill glides instead of bouncing.
 const PILL_TRANSITION =
-  "transform 0.3s cubic-bezier(0.34, 1.4, 0.4, 1), width 0.3s cubic-bezier(0.34, 1.4, 0.4, 1)";
+  "transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), width 0.5s cubic-bezier(0.22, 1, 0.36, 1)";
 
 export const AppNav = ({ active, onChange }: Props) => {
   const { user, loading, logout } = useAuth();
@@ -29,9 +30,15 @@ export const AppNav = ({ active, onChange }: Props) => {
       setPill(null);
       return;
     }
-    const rootBox = root.getBoundingClientRect();
-    const box = target.getBoundingClientRect();
-    setPill({ x: box.left - rootBox.left, width: box.width });
+    // offset* ignores transforms and matches the pill's own coordinate space inside the nav.
+    const measure = () => setPill({ x: target.offsetLeft, width: target.offsetWidth });
+    measure();
+    // Re-measure when web fonts finish loading or the nav changes size, so the pill never drifts.
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(root);
+    observer.observe(target);
+    return () => observer.disconnect();
   }, [active, user]);
 
   const signOut = async () => {
@@ -44,26 +51,26 @@ export const AppNav = ({ active, onChange }: Props) => {
 
   return (
     <header className="sticky top-0 z-30 shrink-0 border-b border-[var(--line-soft)] bg-[var(--wash)]/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-14 max-w-5xl xl:max-w-7xl 2xl:max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-8 xl:px-12">
+      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between gap-2 px-3 xl:max-w-7xl 2xl:max-w-[1440px] sm:gap-4 sm:px-8 xl:px-12">
         <button
           type="button"
           onClick={() => onChange("timeline")}
-          className="flex items-center transition-opacity hover:opacity-60"
+          className="flex shrink-0 items-center transition-opacity hover:opacity-60"
         >
           <img src={logo} alt="Atlas" className="h-6 w-auto select-none" />
         </button>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
           {user ? (
             <nav
               ref={navRef}
               aria-label="主导航"
-              className="relative flex items-center rounded-full bg-black/[0.04] p-0.5 text-xs font-medium"
+              className="relative flex shrink-0 items-center rounded-full bg-black/[0.04] p-0.5 text-xs font-medium"
             >
               {pill ? (
                 <span
                   aria-hidden="true"
-                  className="pointer-events-none absolute top-0.5 bottom-0.5 rounded-full bg-white shadow-[var(--shadow-xs)]"
+                  className="pointer-events-none absolute left-0 top-0.5 bottom-0.5 rounded-full bg-white shadow-[var(--shadow-xs)]"
                   style={{
                     transform: `translateX(${pill.x}px)`,
                     width: pill.width,
@@ -84,9 +91,9 @@ export const AppNav = ({ active, onChange }: Props) => {
                     type="button"
                     aria-current={selected ? "page" : undefined}
                     onClick={() => onChange(item.id)}
-                    className={`relative z-10 flex h-7 items-center rounded-full px-3.5 transition-colors duration-300 ${
+                    className={`relative z-10 flex h-7 shrink-0 items-center whitespace-nowrap rounded-full px-2.5 transition-colors duration-300 sm:px-3.5 ${
                       selected
-                        ? "text-[var(--ink)] font-semibold"
+                        ? "text-[var(--ink)]"
                         : "text-[var(--muted)] hover:text-[var(--ink)]"
                     }`}
                   >
@@ -98,26 +105,26 @@ export const AppNav = ({ active, onChange }: Props) => {
           ) : null}
 
           {loading ? null : user ? (
-            <div className="flex items-center gap-1">
+            <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
               <button
                 type="button"
                 onClick={() => onChange("profile")}
-                className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                className={`flex shrink-0 items-center gap-1 rounded-full px-2 py-1.5 text-xs font-medium transition-colors sm:gap-1.5 sm:px-3 ${
                   active === "profile"
                     ? "bg-[var(--ink)] text-white"
                     : "text-[var(--ink)] hover:bg-black/[0.04]"
                 }`}
                 title={`查看个人主页：${user.username}`}
               >
-                <IconUser className={`h-3.5 w-3.5 ${active === "profile" ? "text-white/70" : "text-[var(--muted)]"}`} />
-                <span className="max-w-[80px] sm:max-w-[120px] truncate">{user.username}</span>
+                <IconUser className={`h-3.5 w-3.5 shrink-0 ${active === "profile" ? "text-white/70" : "text-[var(--muted)]"}`} />
+                <span className="max-w-[60px] truncate whitespace-nowrap sm:max-w-[120px]">{user.username}</span>
               </button>
               <button
                 type="button"
                 aria-label="退出登录"
                 onClick={() => { void signOut(); }}
                 disabled={signingOut}
-                className="flex size-8 items-center justify-center rounded-full text-[var(--faint)] transition-colors hover:bg-black/[0.04] hover:text-[var(--ink)]"
+                className="flex size-8 shrink-0 items-center justify-center rounded-full text-[var(--faint)] transition-colors hover:bg-black/[0.04] hover:text-[var(--ink)]"
                 title="退出登录"
               >
                 <IconSignOut className="h-3.5 w-3.5" />

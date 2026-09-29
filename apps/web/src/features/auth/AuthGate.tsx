@@ -86,12 +86,12 @@ type FieldProps = {
 /** Bordered field: a quiet hairline at rest, a darker border plus a soft halo on focus. */
 const Field = ({ id, label, icon, value, onChange, reveal, ...input }: FieldProps) => (
   <div className="group">
-    <label htmlFor={id} className="mb-2 block text-[13px] font-medium text-zinc-700">
+    <label htmlFor={id} className="mb-1 block text-xs font-medium text-zinc-700 sm:mb-1.5 sm:text-[13px]">
       {label}
     </label>
     <div className="relative flex items-center rounded-xl border border-zinc-200 bg-white transition-[border-color,box-shadow] duration-200 ease-[var(--ease)] hover:border-zinc-300 group-focus-within:border-zinc-900 group-focus-within:shadow-[0_0_0_4px_rgba(17,19,24,0.06)]">
-      <span className="pointer-events-none absolute left-3.5 text-zinc-400 transition-colors duration-200 group-focus-within:text-[var(--ink)]">
-        <Glyph as={icon} />
+      <span className="pointer-events-none absolute left-3 text-zinc-400 transition-colors duration-200 group-focus-within:text-[var(--ink)] sm:left-3.5">
+        <Glyph as={icon} className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
       </span>
       <input
         id={id}
@@ -99,8 +99,8 @@ const Field = ({ id, label, icon, value, onChange, reveal, ...input }: FieldProp
         required
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`auth-input h-12 w-full rounded-xl border-0 bg-transparent pl-11 text-[15px] text-[var(--ink)] disabled:opacity-50 ${
-          reveal ? "pr-12" : "pr-4"
+        className={`auth-input h-9.5 w-full select-text rounded-xl border-0 bg-transparent pl-9 text-[16px] text-[var(--ink)] disabled:opacity-50 sm:h-11 sm:pl-11 sm:text-[15px] md:h-12 ${
+          reveal ? "pr-10 sm:pr-12" : "pr-3 sm:pr-4"
         }`}
         {...input}
       />
@@ -111,7 +111,7 @@ const Field = ({ id, label, icon, value, onChange, reveal, ...input }: FieldProp
           disabled={input.disabled}
           aria-label={reveal.shown ? reveal.hideLabel : reveal.showLabel}
           onClick={reveal.toggle}
-          className="absolute right-2 grid h-8 w-8 place-items-center rounded-lg text-zinc-400 hover:bg-zinc-100 hover:text-[var(--ink)] disabled:opacity-50"
+          className="absolute right-1.5 grid h-7 w-7 place-items-center rounded-lg text-zinc-400 hover:bg-zinc-100 hover:text-[var(--ink)] disabled:opacity-50 sm:right-2 sm:h-8 sm:w-8"
         >
           {[false, true].map((shown) => (
             <span
@@ -120,7 +120,7 @@ const Field = ({ id, label, icon, value, onChange, reveal, ...input }: FieldProp
                 reveal.shown === shown ? "scale-100 opacity-100" : "scale-75 opacity-0"
               }`}
             >
-              <Glyph as={shown ? EyeOff : Eye} />
+              <Glyph as={shown ? EyeOff : Eye} className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
             </span>
           ))}
         </button>
@@ -143,14 +143,34 @@ export const AuthGate = () => {
 
   useEffect(() => {
     mounted.current = true;
+    const preventBounce = (e: TouchEvent) => {
+      if ((e.target as HTMLElement)?.closest("input, button, a")) {
+        return;
+      }
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+    };
+    document.addEventListener("touchmove", preventBounce, { passive: false });
     return () => {
       mounted.current = false;
+      document.removeEventListener("touchmove", preventBounce);
     };
   }, []);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     if (submitting) return;
+
+    if (username.trim().length < 2) {
+      setError("用户名至少需要 2 个字符");
+      return;
+    }
+
+    if (password.length < 8) {
+      setError("密码至少需要 8 个字符");
+      return;
+    }
 
     if (tab === "register" && password !== confirm) {
       setError("两次输入的密码不一致");
@@ -166,9 +186,15 @@ export const AuthGate = () => {
       } else {
         await register(username.trim(), password);
       }
+      if (typeof window !== "undefined" && window.location.search.includes("preview=auth")) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("preview");
+        window.history.replaceState({}, "", url.pathname + (url.search ? url.search : ""));
+      }
     } catch (reason) {
       if (mounted.current) {
-        setError(reason instanceof Error ? reason.message : "连接失败，请稍后重试");
+        const raw = reason instanceof Error ? reason.message : "连接失败，请稍后重试";
+        setError(raw === "Failed to fetch" ? "无法连接到服务器，请检查后端服务是否已启动" : raw);
       }
     } finally {
       if (mounted.current) {
@@ -190,27 +216,42 @@ export const AuthGate = () => {
   const copy = COPY[tab];
 
   return (
-    <main className="soft-scroll relative h-dvh w-full overflow-y-auto overflow-x-hidden bg-white selection:bg-[var(--ink)] selection:text-white">
+    <main
+      className="fixed inset-0 z-50 flex h-dvh w-full select-none flex-col items-center justify-center overflow-hidden bg-white overscroll-none touch-manipulation [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden px-4 py-2 sm:px-6 sm:py-6 selection:bg-[var(--ink)] selection:text-white"
+      style={{
+        paddingTop: "max(0.625rem, env(safe-area-inset-top))",
+        paddingBottom: "max(0.625rem, env(safe-area-inset-bottom))",
+        paddingLeft: "max(1rem, env(safe-area-inset-left))",
+        paddingRight: "max(1rem, env(safe-area-inset-right))",
+      }}
+    >
       <img
         src={logo}
         alt="Atlas"
         draggable={false}
-        style={enter(0)}
-        className="auth-enter absolute left-5 top-5 z-10 h-7 w-auto select-none object-contain sm:left-8 sm:top-7 sm:h-8"
+        style={{
+          ...enter(0),
+          top: "max(0.75rem, env(safe-area-inset-top))",
+          left: "max(1rem, env(safe-area-inset-left))",
+        }}
+        className="auth-enter pointer-events-none absolute z-10 h-5 w-auto select-none object-contain sm:left-8 sm:top-7 sm:h-8"
       />
 
-      <div className="relative flex min-h-full items-center justify-center px-6 pb-12 pt-24 sm:py-16">
-        <div className="w-full max-w-[360px]">
-          <header className="mb-10 text-center">
-            <h1 style={enter(1)} className="auth-enter font-script text-[68px] leading-[1.1] text-[var(--ink)] sm:text-[80px]">
+      <div className="relative flex h-full max-h-[660px] w-full max-w-[340px] flex-col items-center justify-center sm:max-w-[380px]">
+        <div className="my-auto w-full">
+          <header className="mb-[clamp(0.5rem,1.8vh,1.5rem)] text-center">
+            <h1
+              style={enter(1)}
+              className="auth-enter font-script text-[clamp(2.25rem,5.6vh,4.25rem)] leading-none text-[var(--ink)]"
+            >
               Atlas
             </h1>
             <div style={enter(2)} className="auth-enter">
               <Swap
                 mode={tab}
-                className="mt-1"
+                className="mt-0.5 sm:mt-1"
                 render={(m) => (
-                  <p lang="fr" className="font-serif-fr text-[17px] italic text-zinc-500">
+                  <p lang="fr" className="font-serif-fr text-[clamp(11px,1.5vh,15px)] italic text-zinc-500">
                     {COPY[m].motto}
                   </p>
                 )}
@@ -221,7 +262,7 @@ export const AuthGate = () => {
           <nav
             style={enter(3)}
             aria-label="账户入口"
-            className="auth-enter relative mb-8 grid grid-cols-2 rounded-xl bg-zinc-100 p-1 text-sm"
+            className="auth-enter relative mb-[clamp(0.5rem,1.8vh,1.25rem)] grid grid-cols-2 rounded-xl bg-zinc-100 p-1 text-xs sm:text-sm"
           >
             <span
               aria-hidden="true"
@@ -236,7 +277,7 @@ export const AuthGate = () => {
                 disabled={submitting}
                 onClick={() => changeTab(m)}
                 aria-pressed={tab === m}
-                className={`relative h-9 rounded-lg font-medium ${
+                className={`relative h-8 rounded-lg font-medium transition-colors sm:h-9 ${
                   tab === m ? "text-[var(--ink)]" : "text-zinc-500 hover:text-zinc-800"
                 }`}
               >
@@ -245,7 +286,7 @@ export const AuthGate = () => {
             ))}
           </nav>
 
-          <form onSubmit={handleSubmit} className="space-y-6" aria-busy={submitting}>
+          <form onSubmit={handleSubmit} className="space-y-[clamp(0.375rem,1.5vh,1rem)]" aria-busy={submitting}>
             <div style={enter(4)} className="auth-enter">
               <Field
                 id="auth-username"
@@ -306,26 +347,28 @@ export const AuthGate = () => {
                       }}
                     />
                   ) : (
-                    <p lang="fr" className="flex h-full items-center justify-center font-serif-fr text-[15px] italic text-zinc-500">
-                      Le temps est à vous.
-                    </p>
+                    <div className="flex h-full min-h-[54px] items-center justify-center sm:min-h-[60px]">
+                      <p lang="fr" className="font-serif-fr text-[13px] italic text-zinc-400 sm:text-[15px]">
+                        Le temps est à vous.
+                      </p>
+                    </div>
                   )
                 }
               />
             </div>
 
             {error && (
-              <div role="alert" className="label-in flex items-center gap-2 text-xs font-medium text-rose-600">
-                <Glyph as={CircleAlert} className="h-4 w-4 shrink-0" />
+              <div role="alert" className="label-in flex items-center gap-1.5 text-xs font-medium text-rose-600 sm:gap-2">
+                <Glyph as={CircleAlert} className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
                 <span>{error}</span>
               </div>
             )}
 
-            <div style={enter(7)} className="auth-enter pt-2">
+            <div style={enter(7)} className="auth-enter pt-0.5 sm:pt-1">
               <button
                 type="submit"
                 disabled={submitting}
-                className="group relative flex h-12 w-full items-center justify-center overflow-hidden rounded-xl bg-[var(--ink)] text-[15px] font-medium text-white shadow-[0_1px_2px_rgba(17,19,24,0.12)] hover:bg-black hover:shadow-[0_8px_20px_-10px_rgba(17,19,24,0.5)] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
+                className="group relative flex h-10 w-full items-center justify-center overflow-hidden rounded-xl bg-[var(--ink)] text-sm font-medium text-white shadow-[0_1px_2px_rgba(17,19,24,0.12)] hover:bg-black hover:shadow-[0_8px_20px_-10px_rgba(17,19,24,0.5)] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 sm:h-11 sm:text-[15px] md:h-12"
               >
                 <span key={`${tab}-${submitting}`} className="label-in flex items-center gap-2">
                   {submitting ? (
@@ -349,11 +392,11 @@ export const AuthGate = () => {
           <div style={enter(8)} className="auth-enter">
             <Swap
               mode={tab}
-              className="mt-8 text-center"
+              className="mt-[clamp(0.5rem,1.6vh,1.25rem)] text-center"
               render={(m) => {
                 const other: Mode = m === "login" ? "register" : "login";
                 return (
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-[11px] text-zinc-500 sm:text-xs">
                     {COPY[m].switchHint}{" "}
                     <button
                       type="button"
@@ -369,7 +412,11 @@ export const AuthGate = () => {
             />
           </div>
 
-          <footer style={enter(9)} lang="fr" className="auth-enter font-serif-fr mt-14 text-center text-[15px] italic text-zinc-500">
+          <footer
+            style={enter(9)}
+            lang="fr"
+            className="auth-enter font-serif-fr mt-[clamp(0.5rem,2vh,1.5rem)] text-center text-[clamp(10px,1.4vh,13px)] italic text-zinc-400"
+          >
             Atlas — l’art de tenir ses heures
           </footer>
         </div>

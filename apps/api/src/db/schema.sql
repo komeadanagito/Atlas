@@ -1,3 +1,6 @@
+CREATE SCHEMA IF NOT EXISTS atlas;
+SET search_path TO atlas, public;
+
 CREATE TABLE IF NOT EXISTS users (
   id UUID PRIMARY KEY,
   username TEXT NOT NULL,

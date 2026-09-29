@@ -51,7 +51,7 @@ export const WeekStrip = ({ days, selected, onSelect }: Props) => {
             width: pill.width,
             height: pill.height,
             transition:
-              "transform 0.32s cubic-bezier(0.34, 1.3, 0.4, 1), width 0.32s cubic-bezier(0.34, 1.3, 0.4, 1)",
+              "transform 0.45s var(--ease), width 0.45s var(--ease)",
             willChange: "transform, width",
           }}
         />
@@ -87,18 +87,18 @@ export const WeekStrip = ({ days, selected, onSelect }: Props) => {
               {day.isToday ? "今" : day.weekday}
             </span>
             <span
-              className={`display text-[15px] sm:text-base tabular-nums transition-all duration-300 ${
+              className={`numeral text-[1.375rem] sm:text-2xl leading-none transition-colors duration-300 ${
                 active
                   ? "font-semibold text-white"
                   : day.isToday
                     ? "font-semibold text-[var(--ink)]"
-                    : "font-normal text-[var(--ink)]"
+                    : "font-medium text-[var(--ink)]/85"
               }`}
             >
               {day.dayOfMonth}
             </span>
             <span
-              className={`h-0.5 w-0.5 rounded-full transition-all duration-300 ${
+              className={`h-1 w-1 rounded-full transition-colors duration-300 ${
                 day.hasEvents
                   ? active
                     ? "bg-white/80"

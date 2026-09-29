@@ -35,7 +35,8 @@ const AppContent = () => {
             {section === "timeline" ? <TimelinePage key={user.id} /> : null}
             {section === "profile" ? <ProfilePage key={`profile-${user.id}`} /> : null}
             {section === "kit" ? (
-              <div className="min-h-0 flex-1 overflow-y-auto soft-scroll">
+              // Push the scroll clip edge out into the page padding so tile lift/shadow/ring are not cut off.
+              <div className="-mx-4 -mt-4 min-h-0 flex-1 overflow-y-auto px-4 pt-4 soft-scroll">
                 <KitHub onOpen={setSection} />
               </div>
             ) : null}

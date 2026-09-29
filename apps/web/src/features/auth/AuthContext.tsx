@@ -18,13 +18,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const generation = useRef(0);
   const busy = useRef(false);
-  const restore = useCallback(async () => {
+  /** `silent` re-checks in the background while the error banner stays up, so recovery doesn't flicker. */
+  const restore = useCallback(async (silent = false) => {
     const version = ++generation.current;
-    setLoading(true); setError("");
-    try { const next = await fetchMeApi(); if (version === generation.current) setUser(next); }
+    if (!silent) { setLoading(true); setError(""); }
+    try { const next = await fetchMeApi(); if (version === generation.current) { setUser(next); setError(""); } }
     catch { if (version === generation.current) setError("无法恢复登录状态，请检查连接后重试。"); }
     finally { if (version === generation.current) setLoading(false); }
   }, []);
+  // A backend restart shouldn't strand the user: keep probing while restore is failing.
+  useEffect(() => {
+    if (!error) return;
+    const again = () => { void restore(true); };
+    const timer = window.setInterval(again, 3000);
+    window.addEventListener("focus", again);
+    window.addEventListener("online", again);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("focus", again);
+      window.removeEventListener("online", again);
+    };
+  }, [error, restore]);
   useEffect(() => {
     localStorage.removeItem("atlas_auth_token");
     void restore();

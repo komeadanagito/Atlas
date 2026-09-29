@@ -63,6 +63,12 @@ body {
   letter-spacing: -0.02em;
 }
 
+/* Editorial serif figures (old-style, as in the week board). Digits only: Cormorant has no CJK glyphs. */
+.numeral {
+  font-family: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  font-variant-numeric: tabular-nums;
+}
+
 button,
 input,
 textarea {
@@ -158,6 +164,37 @@ textarea::placeholder {
   }
 }
 
+/* Kit hub: staggered entrance + pointer-following spotlight tinted by the module color. */
+.kit-enter {
+  animation: rise 0.5s var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+.kit-tile {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.kit-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    240px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--kit-color) 12%, transparent),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+
+.kit-tile:hover::before {
+  opacity: 1;
+}
+
 .label-in {
   animation: label-in 0.32s var(--ease) both;
 }
@@ -167,6 +204,54 @@ textarea::placeholder {
     opacity: 0;
     transform: translateY(4px);
     filter: blur(2px);
+  }
+}
+
+.day-slide {
+  animation: day-slide 0.42s var(--ease) both;
+}
+
+@keyframes day-slide {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--dir, 0) * 24px));
+    filter: blur(3px);
+  }
+}
+
+.swap-in {
+  animation: swap-in 0.32s var(--ease) both;
+}
+
+@keyframes swap-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+/* Soft sonar ring for the live "now" dot; the dot itself stays still. */
+.now-pulse {
+  position: relative;
+}
+
+.now-pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: now-pulse 2.4s var(--ease) infinite;
+}
+
+@keyframes now-pulse {
+  from {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(3);
   }
 }
 
@@ -187,6 +272,13 @@ textarea::placeholder {
   -webkit-box-shadow: 0 0 0 1000px #fff inset;
   -webkit-text-fill-color: var(--ink);
   caret-color: var(--ink);
+}
+
+/* The field wrapper draws focus (border + halo); the global ring would double it. */
+.auth-input:focus,
+.auth-input:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 
 .soft-scroll {
@@ -239,7 +331,10 @@ textarea::placeholder {
 
   .rise,
   .label-in,
-  .auth-enter {
+  .auth-enter,
+  .day-slide,
+  .swap-in,
+  .now-pulse::after {
     animation: none;
   }
 

@@ -6,11 +6,12 @@ import {
   useMemo,
   useRef,
   useState,
+  type KeyboardEvent,
   type PointerEvent,
 } from "react";
 import { type TimelineItem } from "@atlas/shared";
 import { periodOf } from "../model";
-import { IconBackToNow, IconButton, IconClose, IconNext, IconNow } from "../../../shared/ui/Icons";
+import { IconBackToNow, IconCaretDown, IconClose, IconPlus } from "../../../shared/ui/Icons";
 import { removeTimeline } from "../api";
 import { AddScheduleForm } from "./AddScheduleForm";
 import { HourNoteBoard, HourNoteStrip } from "./HourNotes";
@@ -82,6 +83,8 @@ export const HourWheel = forwardRef<HourWheelHandle, Props>(({ items, isToday, n
     animId: 0,
     hasMoved: false,
     wheelTimer: 0,
+    // Snap destination of the running animation, so repeated key presses step from where the wheel is heading.
+    targetIndex: 0,
   });
   stateRef.current.offsetY = offsetY;
 
@@ -111,6 +114,7 @@ export const HourWheel = forwardRef<HourWheelHandle, Props>(({ items, isToday, n
   const smoothScrollToIndex = useCallback(
     (targetIndex: number) => {
       stopAnimation();
+      stateRef.current.targetIndex = Math.round(targetIndex);
       const startY = stateRef.current.offsetY;
       const targetY = Math.round(targetIndex) * ITEM_HEIGHT;
       const dist = targetY - startY;
@@ -152,6 +156,32 @@ export const HourWheel = forwardRef<HourWheelHandle, Props>(({ items, isToday, n
   }, [scrollToHour]);
 
   useImperativeHandle(ref, () => ({ scrollToNow }), [scrollToNow]);
+
+  const stepBy = (delta: number) => {
+    const from = stateRef.current.animId ? stateRef.current.targetIndex : Math.round(stateRef.current.offsetY / ITEM_HEIGHT);
+    smoothScrollToIndex(from + delta);
+  };
+
+  const onWheelKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.target !== event.currentTarget && event.target !== triggerRef.current) return;
+    const action: Record<string, () => void> = {
+      ArrowUp: () => stepBy(-1),
+      ArrowDown: () => stepBy(1),
+      PageUp: () => stepBy(-3),
+      PageDown: () => stepBy(3),
+      Home: () => scrollToHour(0),
+      End: () => scrollToHour(23),
+    };
+    if (event.target === event.currentTarget) {
+      action.Enter = () => setOpen(true);
+      action[" "] = () => setOpen(true);
+    }
+    const run = action[event.key];
+    if (!run) return;
+    event.preventDefault();
+    setDeleteError("");
+    run();
+  };
 
   useEffect(() => {
     if (isToday) scrollToNow();
@@ -254,13 +284,24 @@ export const HourWheel = forwardRef<HourWheelHandle, Props>(({ items, isToday, n
   const centerHourIndex = Math.round(currentVirtualIndex);
   const focusedHour = ((centerHourIndex % TOTAL_HOURS) + TOTAL_HOURS) % TOTAL_HOURS;
   const currentHour = now.getHours();
-  const alignedToNow = isToday && focusedHour === currentHour;
   const focusedEvents = schedulesByHour.get(focusedHour) ?? [];
 
   useEffect(() => {
     setOpen(false);
     setSelectedId(null);
+    setDeleteError("");
   }, [focusedHour]);
+
+  // Anchor: today follows the live clock, other days jump to their first entry.
+  const anchor = isToday
+    ? { hour: currentHour, time: `${pad(currentHour)}:${pad(now.getMinutes())}`, label: "回到现在" }
+    : items.length
+      ? (() => {
+          const first = new Date(items.reduce((min, entry) => (entry.startAt < min ? entry.startAt : min), items[0].startAt));
+          return { hour: first.getHours(), time: `${pad(first.getHours())}:${pad(first.getMinutes())}`, label: "跳到第一条日程" };
+        })()
+      : null;
+  const atAnchor = anchor !== null && focusedHour === anchor.hour;
 
   const wasOpen = useRef(false);
   useEffect(() => {
@@ -320,19 +361,31 @@ export const HourWheel = forwardRef<HourWheelHandle, Props>(({ items, isToday, n
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      {isToday ? (
-        <div className="mb-2 flex shrink-0 items-center justify-end px-1 lg:max-w-[480px] xl:max-w-[540px]">
-          {alignedToNow ? (
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-black/[0.04] text-[var(--muted)]" title="现在">
-              <IconNow />
+      {/* Always reserve the row so switching days never shifts the wheel. */}
+      <div className="mb-2 flex h-8 shrink-0 items-center justify-end px-1 lg:max-w-[480px] xl:max-w-[540px]">
+        {anchor ? (
+          <button
+            type="button"
+            disabled={atAnchor}
+            aria-label={atAnchor ? `当前位于 ${anchor.time}` : `${anchor.label} ${anchor.time}`}
+            title={atAnchor ? anchor.time : `${anchor.label} ${anchor.time}`}
+            onClick={() => scrollToHour(anchor.hour)}
+            className="group flex h-8 w-8 items-center justify-center rounded-full text-[var(--muted)] transition-[background-color,color,transform] duration-200 hover:bg-black/[0.04] hover:text-[var(--ink)] active:scale-90 disabled:cursor-default disabled:hover:bg-transparent"
+          >
+            <span key={atAnchor ? "at" : "away"} className="swap-in grid h-4 w-4 place-items-center">
+              {atAnchor && isToday ? (
+                <span className="now-pulse h-1.5 w-1.5 rounded-full bg-[var(--ink)] text-[var(--ink)]" />
+              ) : atAnchor ? (
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--faint)]" />
+              ) : (
+                <span className="transition-transform duration-300 ease-[var(--ease)] group-hover:rotate-90">
+                  <IconBackToNow className="h-4 w-4" />
+                </span>
+              )}
             </span>
-          ) : (
-            <IconButton label="回到现在" onClick={scrollToNow}>
-              <IconBackToNow />
-            </IconButton>
-          )}
-        </div>
-      ) : null}
+          </button>
+        ) : null}
+      </div>
 
       <div className="relative flex min-h-0 flex-1 lg:flex-row lg:items-stretch lg:gap-6 xl:gap-8">
         <div
@@ -346,11 +399,15 @@ export const HourWheel = forwardRef<HourWheelHandle, Props>(({ items, isToday, n
               onPointerMove={onPointerMove}
               onPointerUp={onPointerUp}
               onPointerCancel={onPointerUp}
+              onKeyDown={onWheelKeyDown}
+              tabIndex={0}
+              role="group"
+              aria-label={`时间轴，当前 ${pad(focusedHour)}:00，${focusedEvents.length} 项。上下方向键切换小时，回车打开`}
               style={{ perspective: "850px", perspectiveOrigin: "50% 50%", touchAction: "none" }}
-              className="relative min-h-0 flex-1 cursor-grab overflow-hidden select-none active:cursor-grabbing"
+              className="group/wheel relative min-h-0 flex-1 cursor-grab overflow-hidden select-none outline-none active:cursor-grabbing focus-visible:outline-none"
             >
               <div
-                className="pointer-events-none absolute right-4 left-1 z-0 rounded-xl bg-black/[0.035]"
+                className="pointer-events-none absolute right-4 left-1 z-0 rounded-xl bg-black/[0.035] ring-[var(--ink)]/25 transition-shadow duration-200 group-focus-visible/wheel:ring-2"
                 style={{ top: "50%", height: ITEM_HEIGHT, transform: "translateY(-50%)" }}
               />
 
@@ -375,12 +432,12 @@ export const HourWheel = forwardRef<HourWheelHandle, Props>(({ items, isToday, n
                 >
                   <div className={`flex h-14 w-[4.5rem] shrink-0 flex-col justify-center pl-3 ${item.isFocused ? "text-[var(--ink)]" : "text-[var(--faint)]"}`}>
                     <div className="flex items-baseline gap-0.5">
-                      <span className={`display text-[1.5rem] leading-none tracking-tight tabular-nums ${item.isFocused ? "font-semibold" : "font-normal"}`}>{pad(item.hour)}</span>
-                      <span className="text-[11px] font-normal text-[var(--faint)] tabular-nums">:00</span>
+                      <span className={`numeral text-[1.875rem] leading-[0.85] ${item.isFocused ? "font-semibold" : "font-medium"}`}>{pad(item.hour)}</span>
+                      <span className="numeral text-[13px] text-[var(--faint)]">:00</span>
                     </div>
                     {item.isNowHour ? (
-                      <span className="mt-1 inline-flex w-fit items-center text-[10px] font-medium text-[var(--ink)]">
-                        · 现在
+                      <span className="mt-2 inline-flex h-2 w-fit items-center pl-0.5" role="img" aria-label="现在">
+                        <span className="now-pulse h-1.5 w-1.5 rounded-full bg-[var(--ink)] text-[var(--ink)]" />
                       </span>
                     ) : (
                       <span className="mt-1 text-[9px] font-normal tracking-wider text-[var(--faint)]/60 uppercase">
@@ -408,11 +465,15 @@ export const HourWheel = forwardRef<HourWheelHandle, Props>(({ items, isToday, n
                           }}
                         />
                         {item.events.length === 0 ? (
-                          <span className="min-w-0 flex-1 truncate text-xs text-[var(--faint)]">此时间段暂无安排</span>
+                          <span className="flex min-w-0 flex-1 items-center text-[var(--faint)]" role="img" aria-label="此时间段暂无安排">
+                            <IconPlus className="h-4 w-4 shrink-0" />
+                          </span>
                         ) : (
                           <HourNoteStrip items={item.events} />
                         )}
-                        <IconNext className={`ml-auto h-3.5 w-3.5 shrink-0 text-[var(--faint)] duration-200 lg:hidden ${open ? "-rotate-90" : "rotate-90"}`} />
+                        <IconCaretDown
+                          className={`ml-auto h-4 w-4 shrink-0 text-[var(--faint)] transition-transform duration-300 ease-[var(--ease)] lg:hidden ${open ? "rotate-180" : ""}`}
+                        />
                       </div>
                     ) : item.events.length === 0 ? null : (
                       <HourNoteStrip items={item.events} limit={3} />
@@ -440,20 +501,22 @@ export const HourWheel = forwardRef<HourWheelHandle, Props>(({ items, isToday, n
                   key={hour}
                   type="button"
                   onClick={() => scrollToHour(hour)}
-                  className="flex min-h-6 w-full flex-1 shrink-0 items-center justify-center rounded-md py-0.5 hover:bg-black/[0.04] transition-colors"
-                  aria-label={`${pad(hour)}:00`}
+                  className="group flex min-h-6 w-full flex-1 shrink-0 items-center justify-center rounded-md py-0.5 transition-colors hover:bg-black/[0.04]"
+                  aria-label={`${pad(hour)}:00${isNow ? "，现在" : ""}${hasEvents ? "，有日程" : ""}`}
                   aria-pressed={selected}
+                  aria-current={isNow ? "time" : undefined}
                 >
+                  {/* size = focus, fill = has events, ring = now */}
                   <span
-                    className={`rounded-full transition-all duration-200 ${
-                      selected
-                        ? "h-2 w-2 bg-[var(--ink)]"
+                    className={`rounded-full transition-[width,height,background-color,box-shadow] duration-300 ease-[var(--ease)] ${
+                      selected ? "h-2 w-2" : hasEvents || isNow ? "h-1.5 w-1.5" : "h-1 w-1"
+                    } ${
+                      selected || isNow
+                        ? "bg-[var(--ink)]"
                         : hasEvents
-                          ? "h-1.5 w-1.5 bg-[var(--faint)]"
-                          : isNow
-                            ? "h-1.5 w-1.5 ring-1 ring-[var(--ink)] bg-white"
-                            : "h-1 w-1 bg-[var(--line)] hover:bg-[var(--faint)]"
-                    }`}
+                          ? "bg-[var(--faint)] group-hover:bg-[var(--muted)]"
+                          : "bg-[var(--line)] group-hover:bg-[var(--faint)]"
+                    } ${isNow && !selected ? "shadow-[0_0_0_2.5px_white,0_0_0_3.5px_var(--ink)]" : ""}`}
                   />
                 </button>
               );
@@ -479,9 +542,9 @@ export const HourWheel = forwardRef<HourWheelHandle, Props>(({ items, isToday, n
           style={{ pointerEvents: isDesktop || open ? "auto" : "none" }}
         >
           <div className="flex shrink-0 items-center justify-between border-b border-[var(--line-soft)] px-6 py-5">
-            <div>
+            <div key={focusedHour} className="swap-in">
               <p className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-                <span className="display text-2xl font-semibold tracking-tight text-[var(--ink)] tabular-nums">{pad(focusedHour)}:00</span>
+                <span className="numeral text-[2rem] font-semibold leading-[0.85] text-[var(--ink)]">{pad(focusedHour)}:00</span>
                 <span className="text-[11px] font-normal text-[var(--faint)] uppercase tracking-wider">{periodOf(focusedHour)}</span>
                 <span className="text-xs font-normal tabular-nums text-[var(--faint)]">· {focusedEvents.length} 项</span>
               </p>
@@ -499,8 +562,9 @@ export const HourWheel = forwardRef<HourWheelHandle, Props>(({ items, isToday, n
           </div>
           <div className="soft-scroll min-h-0 flex-1 overflow-y-auto p-5 sm:p-6">
             <div className="flex flex-col gap-4">
-              {deleteError ? <p role="alert" className="rounded-xl bg-[var(--danger-soft)] px-3 py-2 text-xs font-medium text-[var(--danger)]">{deleteError}</p> : null}
+              {deleteError ? <p role="alert" className="swap-in rounded-xl bg-[var(--danger-soft)] px-3 py-2 text-xs font-medium text-[var(--danger)]">{deleteError}</p> : null}
               <HourNoteBoard
+                key={focusedHour}
                 deletingId={deletingId}
                 items={focusedEvents}
                 selectedId={selectedId ?? undefined}
@@ -517,6 +581,7 @@ export const HourWheel = forwardRef<HourWheelHandle, Props>(({ items, isToday, n
                   setSelectedId((current) => current === id ? null : current);
                   onDeleted(id);
                 }}
+                onCancelEdit={() => setSelectedId(null)}
               />
             </div>
           </div>

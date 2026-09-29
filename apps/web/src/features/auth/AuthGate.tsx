@@ -3,15 +3,15 @@ import "@fontsource/pinyon-script/400.css";
 import "@fontsource/cormorant-garamond/400-italic.css";
 import {
   ArrowRight,
-  CircleNotch,
+  CircleAlert,
   Eye,
-  EyeSlash,
-  LockSimple,
+  EyeOff,
+  LoaderCircle,
+  LockKeyhole,
   ShieldCheck,
-  User,
-  WarningCircle,
-  type Icon,
-} from "@phosphor-icons/react";
+  UserRound,
+  type LucideIcon as Icon,
+} from "lucide-react";
 import { useAuth } from "./AuthContext";
 import logo from "../../assets/atlas-logo.png";
 
@@ -39,7 +39,7 @@ const COPY = {
 const MODES: readonly Mode[] = ["login", "register"];
 
 const Glyph = ({ as: G, className = "h-[18px] w-[18px]" }: { as: Icon; className?: string }) => (
-  <G className={className} weight="light" aria-hidden="true" focusable="false" />
+  <G className={className} strokeWidth={1.5} absoluteStrokeWidth aria-hidden="true" focusable="false" />
 );
 
 /** Staggered page entrance delay for `.auth-enter`; `step` orders the reveal. */
@@ -83,17 +83,14 @@ type FieldProps = {
   reveal?: { shown: boolean; toggle: () => void; showLabel: string; hideLabel: string };
 };
 
-/** Underline field: a hairline at rest, an ink line drawn from the left on focus. */
+/** Bordered field: a quiet hairline at rest, a darker border plus a soft halo on focus. */
 const Field = ({ id, label, icon, value, onChange, reveal, ...input }: FieldProps) => (
   <div className="group">
-    <label
-      htmlFor={id}
-      className="block text-[11px] font-medium tracking-[0.08em] text-zinc-500 transition-colors duration-300 group-focus-within:text-[var(--ink)]"
-    >
+    <label htmlFor={id} className="mb-2 block text-[13px] font-medium text-zinc-700">
       {label}
     </label>
-    <div className="relative flex items-center">
-      <span className="pointer-events-none absolute left-0 text-zinc-400 transition-colors duration-300 group-focus-within:text-[var(--ink)]">
+    <div className="relative flex items-center rounded-xl border border-zinc-200 bg-white transition-[border-color,box-shadow] duration-200 ease-[var(--ease)] hover:border-zinc-300 group-focus-within:border-zinc-900 group-focus-within:shadow-[0_0_0_4px_rgba(17,19,24,0.06)]">
+      <span className="pointer-events-none absolute left-3.5 text-zinc-400 transition-colors duration-200 group-focus-within:text-[var(--ink)]">
         <Glyph as={icon} />
       </span>
       <input
@@ -102,8 +99,8 @@ const Field = ({ id, label, icon, value, onChange, reveal, ...input }: FieldProp
         required
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`auth-input h-12 w-full border-0 bg-transparent pl-8 text-[15px] text-[var(--ink)] focus:outline-none disabled:opacity-50 ${
-          reveal ? "pr-10" : "pr-0"
+        className={`auth-input h-12 w-full rounded-xl border-0 bg-transparent pl-11 text-[15px] text-[var(--ink)] disabled:opacity-50 ${
+          reveal ? "pr-12" : "pr-4"
         }`}
         {...input}
       />
@@ -114,7 +111,7 @@ const Field = ({ id, label, icon, value, onChange, reveal, ...input }: FieldProp
           disabled={input.disabled}
           aria-label={reveal.shown ? reveal.hideLabel : reveal.showLabel}
           onClick={reveal.toggle}
-          className="absolute right-0 grid h-8 w-8 place-items-center rounded-full text-zinc-400 hover:text-[var(--ink)] disabled:opacity-50"
+          className="absolute right-2 grid h-8 w-8 place-items-center rounded-lg text-zinc-400 hover:bg-zinc-100 hover:text-[var(--ink)] disabled:opacity-50"
         >
           {[false, true].map((shown) => (
             <span
@@ -123,16 +120,11 @@ const Field = ({ id, label, icon, value, onChange, reveal, ...input }: FieldProp
                 reveal.shown === shown ? "scale-100 opacity-100" : "scale-75 opacity-0"
               }`}
             >
-              <Glyph as={shown ? EyeSlash : Eye} />
+              <Glyph as={shown ? EyeOff : Eye} />
             </span>
           ))}
         </button>
       )}
-      <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-zinc-200" />
-      <span
-        aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-[var(--ink)] transition-transform duration-500 ease-[var(--ease)] group-focus-within:scale-x-100"
-      />
     </div>
   </div>
 );
@@ -226,11 +218,14 @@ export const AuthGate = () => {
             </div>
           </header>
 
-          <nav style={enter(3)} aria-label="账户入口" className="auth-enter relative mb-9 grid grid-cols-2 text-sm">
-            <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-zinc-100" />
+          <nav
+            style={enter(3)}
+            aria-label="账户入口"
+            className="auth-enter relative mb-8 grid grid-cols-2 rounded-xl bg-zinc-100 p-1 text-sm"
+          >
             <span
               aria-hidden="true"
-              className={`absolute bottom-0 left-0 h-px w-1/2 bg-[var(--ink)] transition-transform duration-500 ease-[var(--ease)] ${
+              className={`absolute inset-y-1 left-1 w-[calc(50%-4px)] rounded-lg bg-white shadow-[0_1px_2px_rgba(17,19,24,0.06),0_1px_3px_rgba(17,19,24,0.08)] transition-transform duration-300 ease-[var(--ease)] ${
                 tab === "register" ? "translate-x-full" : "translate-x-0"
               }`}
             />
@@ -241,8 +236,8 @@ export const AuthGate = () => {
                 disabled={submitting}
                 onClick={() => changeTab(m)}
                 aria-pressed={tab === m}
-                className={`h-10 font-medium tracking-[0.12em] ${
-                  tab === m ? "text-[var(--ink)]" : "text-zinc-500 hover:text-[var(--ink)]"
+                className={`relative h-9 rounded-lg font-medium ${
+                  tab === m ? "text-[var(--ink)]" : "text-zinc-500 hover:text-zinc-800"
                 }`}
               >
                 {COPY[m].tab}
@@ -256,7 +251,7 @@ export const AuthGate = () => {
                 id="auth-username"
                 name="username"
                 label="用户名"
-                icon={User}
+                icon={UserRound}
                 autoComplete="username"
                 autoFocus
                 minLength={2}
@@ -272,7 +267,7 @@ export const AuthGate = () => {
                 id="auth-password"
                 name="password"
                 label="密码"
-                icon={LockSimple}
+                icon={LockKeyhole}
                 autoComplete={tab === "login" ? "current-password" : "new-password"}
                 minLength={8}
                 maxLength={128}
@@ -321,7 +316,7 @@ export const AuthGate = () => {
 
             {error && (
               <div role="alert" className="label-in flex items-center gap-2 text-xs font-medium text-rose-600">
-                <Glyph as={WarningCircle} className="h-4 w-4 shrink-0" />
+                <Glyph as={CircleAlert} className="h-4 w-4 shrink-0" />
                 <span>{error}</span>
               </div>
             )}
@@ -330,12 +325,12 @@ export const AuthGate = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="group relative flex h-12 w-full items-center justify-center overflow-hidden rounded-full bg-[var(--ink)] text-sm font-medium tracking-[0.08em] text-white hover:bg-black hover:shadow-[0_10px_24px_-12px_rgba(17,19,24,0.55)] active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-60"
+                className="group relative flex h-12 w-full items-center justify-center overflow-hidden rounded-xl bg-[var(--ink)] text-[15px] font-medium text-white shadow-[0_1px_2px_rgba(17,19,24,0.12)] hover:bg-black hover:shadow-[0_8px_20px_-10px_rgba(17,19,24,0.5)] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <span key={`${tab}-${submitting}`} className="label-in flex items-center gap-2">
                   {submitting ? (
                     <>
-                      <Glyph as={CircleNotch} className="h-4 w-4 animate-spin" />
+                      <Glyph as={LoaderCircle} className="h-4 w-4 animate-spin" />
                       {copy.pending}
                     </>
                   ) : (

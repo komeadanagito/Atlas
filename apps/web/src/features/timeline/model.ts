@@ -133,28 +133,6 @@ export const monthGrid = (dateKey: string, items: TimelineItem[], todayKey: stri
   });
 };
 
-export const daysAround = (
-  centerKey: string,
-  items: TimelineItem[],
-  todayKey: string,
-  radius = 3,
-): WeekDay[] => {
-  const counts = countByDay(items);
-  return Array.from({ length: radius * 2 + 1 }, (_, index) => {
-    const key = shiftDateKey(centerKey, index - radius);
-    const date = parseDateKey(key);
-    const count = counts.get(key) ?? 0;
-    return {
-      date: key,
-      dayOfMonth: date.getDate(),
-      weekday: WEEKDAYS[mondayIndex(date)],
-      isToday: key === todayKey,
-      hasEvents: count > 0,
-      count,
-    };
-  });
-};
-
 export const periodOf = (hour: number) => {
   if (hour < 6) return "凌晨";
   if (hour < 12) return "上午";

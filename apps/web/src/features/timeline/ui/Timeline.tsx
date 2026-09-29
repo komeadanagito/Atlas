@@ -1,23 +1,30 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { IconButton, IconNext, IconPrev, IconToday } from "../../../shared/ui/Icons";
+import { Figures } from "../../../shared/ui/Figures";
 import { RangeSwitch, type TimeRange } from "../../../shared/ui/RangeSwitch";
 import { useTimelineItems } from "../useTimelineItems";
 import {
-  daysAround,
   itemsOn,
   monthGrid,
   parseDateKey,
   shiftDateKey,
   shiftMonth,
+  startOfWeek,
   todayKeyOf,
   weekOf,
   weekSpanLabel,
   weekdayOf,
 } from "../model";
-import { HourWheel, type HourWheelHandle } from "./HourWheel";
+import { HourWheel } from "./HourWheel";
 import { MonthBoard } from "./MonthBoard";
 import { WeekBoard } from "./WeekBoard";
 import { WeekStrip } from "./WeekStrip";
+
+const STEP_LABELS: Record<TimeRange, readonly [string, string]> = {
+  day: ["前一天", "后一天"],
+  week: ["上一周", "下一周"],
+  month: ["上个月", "下个月"],
+};
 
 export const TimelinePage = () => {
   const { items, loading, error, retry, upsert, remove } = useTimelineItems();
@@ -25,7 +32,14 @@ export const TimelinePage = () => {
   const [selectedDate, setSelectedDate] = useState(todayKey);
   const [range, setRange] = useState<TimeRange>("day");
   const [now, setNow] = useState(() => new Date());
-  const wheelRef = useRef<HourWheelHandle>(null);
+  // -1 / 1 drives the direction the day view slides in from; 0 = no directional motion.
+  const [direction, setDirection] = useState(0);
+
+  const selectDate = (next: string) => {
+    if (next === selectedDate) return;
+    setDirection(next > selectedDate ? 1 : -1);
+    setSelectedDate(next);
+  };
 
   useEffect(() => {
     const id = window.setInterval(() => {
@@ -37,7 +51,7 @@ export const TimelinePage = () => {
   }, []);
 
   const date = parseDateKey(selectedDate);
-  const aroundToday = useMemo(() => daysAround(selectedDate, items, todayKey, 3), [selectedDate, todayKey, items]);
+  const weekKey = startOfWeek(selectedDate);
   const week = useMemo(() => weekOf(selectedDate, items, todayKey), [selectedDate, items, todayKey]);
   const cells = useMemo(() => monthGrid(selectedDate, items, todayKey), [selectedDate, items, todayKey]);
   const dayItems = useMemo(() => itemsOn(items, selectedDate), [items, selectedDate]);
@@ -46,37 +60,45 @@ export const TimelinePage = () => {
   const monthCount = cells.filter((cell) => cell.inMonth).reduce((sum, cell) => sum + cell.count, 0);
 
   const move = (step: number) => {
-    if (range === "week") setSelectedDate(shiftDateKey(selectedDate, step * 7));
-    else if (range === "month") setSelectedDate(shiftMonth(selectedDate, step));
-    else setSelectedDate(shiftDateKey(selectedDate, step));
+    if (range === "week") selectDate(shiftDateKey(selectedDate, step * 7));
+    else if (range === "month") selectDate(shiftMonth(selectedDate, step));
+    else selectDate(shiftDateKey(selectedDate, step));
   };
 
   const openDay = (next: string) => {
-    setSelectedDate(next);
+    selectDate(next);
     setRange("day");
   };
+
+  const [prevLabel, nextLabel] = STEP_LABELS[range];
 
   return (
     <main className="flex min-h-0 flex-1 flex-col gap-5">
       <header className="flex shrink-0 flex-wrap items-end justify-between gap-4 pb-1">
-        <div>
+        {/* Hard height (not min-height): the tallest title (day view) fits, so neither the controls nor the content below move between views. */}
+        <div key={range} className="label-in flex h-16 items-end">
           {range === "month" ? (
             <div className="flex items-baseline gap-2.5">
-              <h1 className="display text-[2rem] leading-none sm:text-[2.25rem] font-semibold tracking-tight text-[var(--ink)]">
-                {date.getMonth() + 1}月
+              <h1 className="flex items-baseline gap-1 leading-none text-[var(--ink)]">
+                <span className="numeral text-[2.75rem] sm:text-[3rem] font-semibold leading-[0.85]">{date.getMonth() + 1}</span>
+                <span className="text-base font-medium">月</span>
               </h1>
-              <p className="text-xs font-normal text-[var(--faint)] tabular-nums">{date.getFullYear()}</p>
+              <p className="numeral text-sm text-[var(--faint)]">{date.getFullYear()}</p>
             </div>
           ) : range === "week" ? (
             <div>
-              <h1 className="display text-xl sm:text-2xl font-semibold tracking-tight text-[var(--ink)] text-balance">
-                {weekSpanLabel(selectedDate)}
+              <h1 className="flex items-baseline text-[var(--ink)] text-balance">
+                <Figures
+                  text={weekSpanLabel(selectedDate)}
+                  figureClassName="text-[1.75rem] sm:text-[2rem] font-semibold leading-none"
+                  textClassName="px-0.5 text-sm font-medium"
+                />
               </h1>
               <p className="mt-1 text-xs font-normal text-[var(--faint)] tabular-nums">{weekCount} 项日程</p>
             </div>
           ) : (
             <div className="flex items-baseline gap-3">
-              <span className="display text-[3rem] sm:text-[3.5rem] font-semibold leading-[0.9] tracking-tighter text-[var(--ink)] tabular-nums">
+              <span className="numeral text-[3.5rem] sm:text-[4rem] font-semibold leading-[0.8] text-[var(--ink)]">
                 {String(date.getDate()).padStart(2, "0")}
               </span>
               <div className="pb-1">
@@ -94,21 +116,16 @@ export const TimelinePage = () => {
         </div>
 
         <div className="flex items-center gap-1">
-          <IconButton
-            label="回到今天"
-            onClick={() => {
-              setSelectedDate(todayKey);
-              wheelRef.current?.scrollToNow();
-            }}
-          >
+          {/* Selecting today remounts the wheel, which aligns itself to the current hour. */}
+          <IconButton label="回到今天" disabled={isToday} onClick={() => selectDate(todayKey)}>
             <IconToday />
           </IconButton>
           <RangeSwitch value={range} onChange={setRange} />
           <div className="flex items-center">
-            <IconButton label="上一段" onClick={() => move(-1)}>
+            <IconButton label={prevLabel} onClick={() => move(-1)}>
               <IconPrev />
             </IconButton>
-            <IconButton label="下一段" onClick={() => move(1)}>
+            <IconButton label={nextLabel} onClick={() => move(1)}>
               <IconNext />
             </IconButton>
           </div>
@@ -125,20 +142,29 @@ export const TimelinePage = () => {
 
       {range === "day" && (!loading || items.length > 0) && (!error || items.length > 0) ? (
         <div key="day" className="rise flex min-h-0 flex-1 flex-col gap-5">
-          <div className="shrink-0">
-            <WeekStrip days={aroundToday} selected={selectedDate} onSelect={setSelectedDate} />
+          {/* Anchored to the calendar week: within a week only the pill moves; crossing weeks slides the strip. */}
+          <div
+            key={weekKey}
+            className="day-slide shrink-0"
+            style={{ "--dir": direction } as CSSProperties}
+          >
+            <WeekStrip days={week} selected={selectedDate} onSelect={selectDate} />
           </div>
-          <HourWheel
+          <div
             key={selectedDate}
-            ref={wheelRef}
-            items={dayItems}
-            isToday={isToday}
-            now={now}
-            dateKey={selectedDate}
-            onCreated={upsert}
-            onUpdated={upsert}
-            onDeleted={remove}
-          />
+            className="day-slide flex min-h-0 flex-1 flex-col"
+            style={{ "--dir": direction } as CSSProperties}
+          >
+            <HourWheel
+              items={dayItems}
+              isToday={isToday}
+              now={now}
+              dateKey={selectedDate}
+              onCreated={upsert}
+              onUpdated={upsert}
+              onDeleted={remove}
+            />
+          </div>
         </div>
       ) : null}
 
@@ -148,7 +174,7 @@ export const TimelinePage = () => {
             days={week}
             items={items}
             selected={selectedDate}
-            onSelect={setSelectedDate}
+            onSelect={selectDate}
             onOpenDay={openDay}
           />
         </div>
@@ -161,7 +187,7 @@ export const TimelinePage = () => {
             cells={cells}
             selected={selectedDate}
             selectedItems={dayItems}
-            onSelect={setSelectedDate}
+            onSelect={selectDate}
             onOpenDay={openDay}
           />
         </div>

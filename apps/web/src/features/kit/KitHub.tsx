@@ -1,49 +1,49 @@
+import type { CSSProperties, PointerEvent } from "react";
 import { KIT_MODULES, type KitModuleId } from "../../app/routes";
-import { KIND_ICON } from "../../shared/ui/Icons";
+import { IconArrowRight, KIND_ICON } from "../../shared/ui/Icons";
 
 type Props = {
   onOpen: (id: KitModuleId) => void;
 };
 
-const KIT_DESCRIPTIONS: Record<KitModuleId, string> = {
-  fitness: "运动打卡与训练计划",
-  learning: "专注学习与知识输入",
-  daily: "生活随手记与日常备忘",
-  knowledge: "结构化知识沉淀与分类",
+const pad = (n: number) => String(n).padStart(2, "0");
+
+// Writes the pointer position straight to CSS vars so the spotlight follows without re-rendering.
+const trackPointer = (event: PointerEvent<HTMLButtonElement>) => {
+  if (event.pointerType !== "mouse") return;
+  const el = event.currentTarget;
+  const box = el.getBoundingClientRect();
+  el.style.setProperty("--mx", `${event.clientX - box.left}px`);
+  el.style.setProperty("--my", `${event.clientY - box.top}px`);
 };
 
 export const KitHub = ({ onOpen }: Props) => (
-  <main className="rise max-w-5xl">
-    <div className="mb-6">
-      <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">百宝箱</h1>
-      <p className="mt-1 text-xs sm:text-sm text-slate-500">各领域专属独立模块，自由拓展日程之外的个人管理系统</p>
-    </div>
-    <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {KIT_MODULES.map((item) => {
+  <main aria-label="百宝箱" className="max-w-5xl pb-6">
+    <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+      {KIT_MODULES.map((item, index) => {
         const Icon = KIND_ICON[item.id];
-        const desc = KIT_DESCRIPTIONS[item.id];
         return (
-          <li key={item.id} data-kit={item.id}>
+          <li key={item.id} data-kit={item.id} className="kit-enter" style={{ "--i": index } as CSSProperties}>
             <button
               type="button"
               onClick={() => onOpen(item.id)}
-              className="group flex h-full w-full flex-col justify-between rounded-3xl bg-white p-6 text-left shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+              onPointerMove={trackPointer}
+              className="kit-tile group flex h-36 w-full flex-col justify-between rounded-2xl bg-white p-5 text-left ring-1 ring-[var(--line)] transition-[box-shadow,transform] duration-300 ease-[var(--ease)] hover:-translate-y-1 hover:shadow-[var(--shadow-lg)] active:translate-y-0 active:scale-[0.99] sm:h-40"
             >
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--kit-soft)] text-[var(--kit-color)] transition-transform duration-200 group-hover:scale-105">
-                    <Icon className="h-6 w-6" />
-                  </span>
-                  <span className="text-xs font-semibold text-slate-300 group-hover:text-slate-600 transition-colors">
-                    →
-                  </span>
-                </div>
-                <h2 className="mt-5 text-base font-semibold text-slate-900">{item.label}</h2>
-                <p className="mt-1 text-xs leading-relaxed text-slate-500">{desc}</p>
-              </div>
-              <div className="mt-5 flex items-center justify-between text-[11px] font-medium text-[var(--kit-color)]">
-                <span>进入模块</span>
-              </div>
+              <span className="flex items-start justify-between">
+                {/* Monochrome by default; the module color only appears on hover. */}
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl text-[var(--ink)]/80 ring-1 ring-[var(--line)] transition-[color,transform,box-shadow] duration-500 ease-[var(--ease)] group-hover:-rotate-6 group-hover:scale-110 group-hover:text-[var(--kit-color)] group-hover:ring-[var(--kit-color)]/25">
+                  <Icon className="h-[18px] w-[18px]" />
+                </span>
+                <span className="numeral text-sm text-[var(--faint)]/70">{pad(index + 1)}</span>
+              </span>
+
+              <span className="flex items-end justify-between">
+                <span className="text-[15px] font-medium tracking-wide text-[var(--ink)] transition-transform duration-300 ease-[var(--ease)] group-hover:translate-x-0.5">
+                  {item.label}
+                </span>
+                <IconArrowRight className="h-4 w-4 -translate-x-2 text-[var(--kit-color)] opacity-0 transition-[opacity,transform] duration-300 ease-[var(--ease)] group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100" />
+              </span>
             </button>
           </li>
         );

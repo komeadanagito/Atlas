@@ -56,8 +56,10 @@ describe("HourWheel", () => {
       onDeleted: vi.fn(),
     }));
     fireEvent.click(screen.getByRole("button", { name: "管理 09:00 的日程" }));
+    fireEvent.click(screen.getByRole("button", { name: "删除晨跑" }));
+    expect(removeTimeline).not.toHaveBeenCalled();
     await act(async () => {
-      fireEvent.click(screen.getByRole("button", { name: "删除晨跑" }));
+      fireEvent.click(screen.getByRole("button", { name: "确认删除晨跑" }));
     });
     expect(screen.getByRole("alert").textContent).toContain("删除失败");
     expect(screen.getAllByText("晨跑").length).toBeGreaterThan(0);

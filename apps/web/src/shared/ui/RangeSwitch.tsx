@@ -16,7 +16,7 @@ type Props = {
 type PillBox = { x: number; width: number };
 
 const PILL_TRANSITION =
-  "transform 0.28s cubic-bezier(0.34, 1.3, 0.4, 1), width 0.28s cubic-bezier(0.34, 1.3, 0.4, 1)";
+  "transform 0.4s var(--ease), width 0.4s var(--ease)";
 
 export const RangeSwitch = ({ value, onChange }: Props) => {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -86,13 +86,17 @@ export const RangeSwitch = ({ value, onChange }: Props) => {
             aria-pressed={active}
             onClick={() => onChange(item.id)}
             onKeyDown={(event) => handleKeyDown(event, index)}
-            className={`relative z-10 min-h-7 rounded-full px-3 text-xs leading-none transition-colors duration-300 ${
+            className={`relative z-10 grid min-h-7 place-items-center rounded-full px-3 text-xs leading-none transition-colors duration-300 ${
               active
                 ? "font-semibold text-[var(--ink)]"
                 : "text-[var(--muted)] hover:text-[var(--ink)] font-normal"
             }`}
           >
-            {item.label}
+            {/* Invisible bold copy reserves the widest width so weight changes never resize the button. */}
+            <span aria-hidden="true" className="invisible col-start-1 row-start-1 font-semibold">
+              {item.label}
+            </span>
+            <span className="col-start-1 row-start-1">{item.label}</span>
           </button>
         );
       })}

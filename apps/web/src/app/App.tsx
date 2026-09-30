@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AppNav } from "./shell/AppNav";
 import { isKitModule, type SectionId } from "./routes";
+import { AiPage } from "../features/ai/AiPage";
 import { AuthProvider, useAuth } from "../features/auth/AuthContext";
 import { AuthGate } from "../features/auth/AuthGate";
 import { AuthModal } from "../features/auth/AuthModal";
@@ -13,7 +14,7 @@ import { TimelinePage } from "../features/timeline/ui/Timeline";
 const AppContent = () => {
   const { user, loading, error, retry } = useAuth();
   const [section, setSection] = useState<SectionId>("timeline");
-  const navActive = section === "timeline" ? "timeline" : section === "profile" ? "profile" : "kit";
+  const navActive = isKitModule(section) ? "kit" : section;
 
   if (!user && typeof window !== "undefined" && window.location.search.includes("preview=auth")) {
     return <AuthGate />;
@@ -35,6 +36,7 @@ const AppContent = () => {
           <>
             {section === "timeline" ? <TimelinePage key={user.id} /> : null}
             {section === "profile" ? <ProfilePage key={`profile-${user.id}`} /> : null}
+            {section === "ai" ? <AiPage key={`ai-${user.id}`} /> : null}
             {section === "kit" ? (
               // Push the scroll clip edge out into the page padding so tile lift/shadow/ring are not cut off.
               <div className="-mx-4 -mt-4 min-h-0 flex-1 overflow-y-auto px-4 pt-4 soft-scroll">

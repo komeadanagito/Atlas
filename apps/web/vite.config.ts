@@ -15,7 +15,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "/api": `http://127.0.0.1:${process.env.PORT || 8788}`,
+      "/api": `http://127.0.0.1:${process.env.PORT || 8787}`,
     },
   },
 });

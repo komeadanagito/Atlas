@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { bodyLimit } from "hono/body-limit";
+import { aiRoutes } from "./modules/ai/routes";
 import { authRoutes } from "./modules/auth/routes";
 import { timelineRoutes } from "./modules/timeline/routes";
 
@@ -25,6 +26,7 @@ app.use("/api/auth/*", async (c, next) => {
 });
 app.route("/api/auth", authRoutes);
 app.route("/api/timeline", timelineRoutes);
+app.route("/api/ai", aiRoutes);
 app.get("/api/health", (c) => c.json({ ok: true }));
 app.onError((error, c) => {
   console.error("API request failed", error);

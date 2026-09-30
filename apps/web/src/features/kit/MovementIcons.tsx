@@ -1007,8 +1007,22 @@ const ICONS: Record<string, ReactNode> = {
 
 type Props = { id: string; className?: string };
 
+// Merged equipment entries reuse the icon of a representative movement instead of new SVGs.
+const ALIASES: Record<string, string> = {
+  barbell: "barbell-back-squat",
+  dumbbell: "dumbbell-shoulder-press",
+  "cable-crossover": "smith-machine",
+  "resistance-band": "resistance-band-row",
+  kettlebell: "kettlebell-swing",
+  trx: "trx-row",
+  "pec-deck-machine": "chest-press-machine",
+  "pull-up-bar": "lat-pulldown",
+  "foam-roller": "foam-roll-thoracic",
+  "medicine-ball": "medicine-ball-slam",
+};
+
 export const MovementIcon = ({ id, className }: Props) => {
-  const icon = ICONS[id];
+  const icon = ICONS[id] ?? (ALIASES[id] ? ICONS[ALIASES[id]] : undefined);
   if (!icon) return <IconFitness className={className} />;
   return <Svg className={className}>{icon}</Svg>;
 };

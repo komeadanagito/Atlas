@@ -1,6 +1,7 @@
 export const NAV = [
   { id: "timeline", label: "时间轴" },
   { id: "kit", label: "百宝箱" },
+  { id: "ai", label: "AI" },
 ] as const;
 
 export type SectionId = (typeof NAV)[number]["id"] | KitModuleId | "profile";

@@ -38,3 +38,24 @@ run("real PG isolates users and revokes all sessions after password change", asy
   expect(await auth.findUserByToken(token!)).toBeNull(); expect(await auth.findUserByToken(token2!)).toBeNull();
   expect(await timeline.deleteItem(a.id,item.id)).toBe(true);
 });
+run("real PG isolates AI conversations and serialises replies", async () => {
+  const { hashPassword } = await import("./modules/auth/crypto");
+  const ai = await import("./modules/ai/repo");
+  const suffix = randomUUID().slice(0,8);
+  const a = await auth.createUser(`ai_a_${suffix}`, hashPassword("secret123")); ids.push(a.id);
+  const b = await auth.createUser(`ai_b_${suffix}`, hashPassword("secret123")); ids.push(b.id);
+  const conversationId = randomUUID(), replyId = randomUUID();
+  const ask = { kind: "ask" as const, conversationId, userMessageId: randomUUID(), replyId, content: "你好" };
+  expect(await ai.beginChat(a.id, ask)).toEqual({ ok: true, turns: [{ role: "user", content: "你好" }] });
+  expect(await ai.beginChat(b.id, { ...ask, userMessageId: randomUUID(), replyId: randomUUID() })).toEqual({ ok: false, reason: "not_found" });
+  expect(await ai.beginChat(a.id, { ...ask, userMessageId: randomUUID(), replyId: randomUUID() })).toEqual({ ok: false, reason: "conflict" });
+  await ai.finishReply(replyId, { content: "嗨", reasoning: "", status: "done" });
+  expect(await ai.getConversation(b.id, conversationId)).toBeNull();
+  expect(await ai.listConversations(b.id)).toEqual([]);
+  expect((await ai.getConversation(a.id, conversationId))?.messages.map((m) => [m.role, m.content, m.status])).toEqual([["user", "你好", "done"], ["assistant", "嗨", "done"]]);
+  expect(await ai.beginChat(a.id, { kind: "retry", conversationId, replyId })).toEqual({ ok: true, turns: [{ role: "user", content: "你好" }] });
+  await ai.finishReply(replyId, { content: "", reasoning: "", status: "error", error: "失败" });
+  expect((await ai.getConversation(a.id, conversationId))?.messages[1]).toMatchObject({ status: "error", error: "失败" });
+  expect(await ai.deleteConversation(b.id, conversationId)).toBe(false);
+  expect(await ai.deleteConversation(a.id, conversationId)).toBe(true);
+});

@@ -14,7 +14,7 @@
       "股四头肌",
       "腘绳肌",
       "臀肌",
-      "小腿"
+      "小腿三头肌"
     ],
     "impact": "中",
     "intensity": "低-高",
@@ -39,7 +39,7 @@
     "muscles": [
       "臀肌",
       "腘绳肌",
-      "小腿",
+      "小腿三头肌",
       "核心"
     ],
     "impact": "中",
@@ -65,7 +65,7 @@
     "muscles": [
       "股四头肌",
       "臀肌",
-      "小腿"
+      "小腿三头肌"
     ],
     "impact": "低",
     "intensity": "低-中",
@@ -224,7 +224,7 @@
     "muscles": [
       "臀肌",
       "股四头肌",
-      "小腿"
+      "小腿三头肌"
     ],
     "impact": "中",
     "intensity": "中-高",
@@ -248,7 +248,7 @@
     "muscles": [
       "臀肌",
       "股四头肌",
-      "小腿"
+      "小腿三头肌"
     ],
     "impact": "低",
     "intensity": "低-中",
@@ -258,83 +258,6 @@
       "碎片时间"
     ],
     "tips": "踩到底再换脚，保持节奏均匀。"
-  },
-  {
-    "id": "vertical-climber",
-    "name": "攀爬机",
-    "aliases": [
-      "VersaClimber",
-      "垂直攀爬机"
-    ],
-    "type": "cardio",
-    "method": "cardio-equipment",
-    "group": "攀爬踏步类",
-    "summary": "手脚交替向上攀爬，全身参与，强度很高。",
-    "muscles": [
-      "臀肌",
-      "股四头肌",
-      "背阔肌",
-      "肩部",
-      "核心"
-    ],
-    "impact": "低",
-    "intensity": "高",
-    "suitableFor": [
-      "HIIT",
-      "体能训练"
-    ],
-    "tips": "先用短行程熟悉协调，再加大幅度和速度。"
-  },
-  {
-    "id": "ski-erg",
-    "name": "滑雪机",
-    "aliases": [
-      "SkiErg",
-      "滑雪测功仪"
-    ],
-    "type": "cardio",
-    "method": "cardio-equipment",
-    "group": "上肢与其他",
-    "summary": "模拟越野滑雪下拉动作，以上肢和核心为主。",
-    "muscles": [
-      "背阔肌",
-      "三头肌",
-      "核心",
-      "臀肌"
-    ],
-    "impact": "低",
-    "intensity": "中-高",
-    "suitableFor": [
-      "上肢耐力",
-      "体能训练"
-    ],
-    "tips": "用髋部屈伸带动下拉，不要只靠手臂。"
-  },
-  {
-    "id": "arm-ergometer",
-    "name": "上肢功率车",
-    "aliases": [
-      "手摇车",
-      "UBE",
-      "Arm Ergometer"
-    ],
-    "type": "cardio",
-    "method": "cardio-equipment",
-    "group": "上肢与其他",
-    "summary": "用双手摇动曲柄，下肢不受力。",
-    "muscles": [
-      "肩部",
-      "手臂",
-      "胸背"
-    ],
-    "impact": "低",
-    "intensity": "低-中",
-    "suitableFor": [
-      "下肢受伤",
-      "康复",
-      "轮椅使用者"
-    ],
-    "tips": "肩膀放松下沉，可正反两个方向交替摇。"
   },
   {
     "id": "outdoor-jogging",
@@ -380,7 +303,7 @@
       "股四头肌",
       "小腿三头肌",
       "臀大肌",
-      "核心肌群"
+      "核心"
     ],
     "impact": "高",
     "intensity": "中-高",
@@ -406,8 +329,8 @@
       "股四头肌",
       "臀大肌",
       "小腿三头肌",
-      "核心肌群",
-      "踝关节稳定肌"
+      "核心",
+      "踝稳定肌"
     ],
     "impact": "高",
     "intensity": "中-高",
@@ -472,34 +395,6 @@
     "tips": "摆臂配合步频，目标心率控制在最大心率的 60%~70%。"
   },
   {
-    "id": "nordic-walking",
-    "name": "北欧式健走",
-    "aliases": [
-      "持杖健走",
-      "健走",
-      "Nordic Walking"
-    ],
-    "type": "cardio",
-    "method": "running-outdoor",
-    "group": "跑走类",
-    "summary": "双手持健走杖行走，调动上肢参与，消耗高于普通步行。",
-    "muscles": [
-      "小腿三头肌",
-      "股四头肌",
-      "背阔肌",
-      "三角肌",
-      "核心肌群"
-    ],
-    "impact": "低",
-    "intensity": "低-中",
-    "suitableFor": [
-      "中老年",
-      "膝踝敏感者",
-      "全身协调训练"
-    ],
-    "tips": "手杖长度约为身高的 68%，推杖时手臂充分向后伸展。"
-  },
-  {
     "id": "road-cycling",
     "name": "公路骑行",
     "aliases": [
@@ -540,7 +435,7 @@
     "muscles": [
       "股四头肌",
       "臀大肌",
-      "核心肌群",
+      "核心",
       "前臂肌群"
     ],
     "impact": "中",
@@ -551,83 +446,6 @@
       "进阶骑行者"
     ],
     "tips": "下坡时重心后移、肘部外张，视线看向来路前方 5~10 米。"
-  },
-  {
-    "id": "commuter-cycling",
-    "name": "通勤骑行",
-    "aliases": [
-      "自行车通勤",
-      "Bike Commuting"
-    ],
-    "type": "cardio",
-    "method": "cycling",
-    "group": "骑行类",
-    "summary": "以自行车替代交通工具上下班，把有氧融入日常生活。",
-    "muscles": [
-      "股四头肌",
-      "小腿三头肌",
-      "臀大肌"
-    ],
-    "impact": "低",
-    "intensity": "低-中",
-    "suitableFor": [
-      "上班族",
-      "日常活动量提升",
-      "新手"
-    ],
-    "tips": "佩戴头盔、提前规划骑行道，单程 30~60 分钟收益最佳。"
-  },
-  {
-    "id": "indoor-cycling-trainer",
-    "name": "室内骑行台",
-    "aliases": [
-      "骑行台训练",
-      "功率骑行",
-      "Indoor Trainer"
-    ],
-    "type": "cardio",
-    "method": "cycling",
-    "group": "骑行类",
-    "summary": "将自行车固定于骑行台进行室内训练，精准控制强度区间。",
-    "muscles": [
-      "股四头肌",
-      "臀大肌",
-      "小腿三头肌"
-    ],
-    "impact": "低",
-    "intensity": "低-高",
-    "suitableFor": [
-      "恶劣天气替代",
-      "功率训练",
-      "时间固定者"
-    ],
-    "tips": "准备风扇与毛巾，按功率或心率区间安排间歇与恢复。"
-  },
-  {
-    "id": "gravel-riding",
-    "name": "砾石骑行",
-    "aliases": [
-      "瓜车骑行",
-      "Gravel Riding"
-    ],
-    "type": "cardio",
-    "method": "cycling",
-    "group": "骑行类",
-    "summary": "骑砾石公路车探索土路与乡道，介于公路与山地之间的玩法。",
-    "muscles": [
-      "股四头肌",
-      "臀大肌",
-      "腘绳肌",
-      "核心肌群"
-    ],
-    "impact": "低",
-    "intensity": "中",
-    "suitableFor": [
-      "长途耐力",
-      "探索型骑行者",
-      "公路车进阶"
-    ],
-    "tips": "胎压比公路车低 20%~30%，长距离骑行注意补给与防晒。"
   },
   {
     "id": "swimming",
@@ -643,7 +461,7 @@
     "muscles": [
       "背阔肌",
       "三角肌",
-      "核心肌群",
+      "核心",
       "股四头肌",
       "胸大肌"
     ],
@@ -671,7 +489,7 @@
     "muscles": [
       "背阔肌",
       "三角肌",
-      "核心肌群",
+      "核心",
       "肱二头肌"
     ],
     "impact": "低",
@@ -695,7 +513,7 @@
     "group": "水上类",
     "summary": "站立于桨板上单叶划行，考验平衡与核心稳定的水上有氧。",
     "muscles": [
-      "核心肌群",
+      "核心",
       "背阔肌",
       "三角肌",
       "股四头肌"
@@ -710,109 +528,57 @@
     "tips": "双脚与肩同宽站板中央，划桨时保持核心收紧、目视前方。"
   },
   {
-    "id": "aqua-aerobics",
-    "name": "水中有氧",
-    "aliases": [
-      "水中健身操",
-      "Aqua Aerobics"
-    ],
-    "type": "cardio",
-    "method": "rowing-water",
-    "group": "水上类",
-    "summary": "在齐胸深水中做跳跃与抗阻动作，借助浮力保护关节。",
-    "muscles": [
-      "核心肌群",
-      "股四头肌",
-      "臀大肌",
-      "三角肌"
-    ],
-    "impact": "低",
-    "intensity": "低-中",
-    "suitableFor": [
-      "中老年",
-      "孕产期人群",
-      "关节康复",
-      "大体重人群"
-    ],
-    "tips": "利用水的阻力做大幅度慢动作，比快速划水更费力有效。"
-  },
-  {
-    "id": "dragon-boat",
-    "name": "划龙舟",
-    "aliases": [
-      "龙舟训练",
-      "Dragon Boat"
-    ],
-    "type": "cardio",
-    "method": "rowing-water",
-    "group": "水上类",
-    "summary": "团队协作的节奏性划船运动，短时间高强度的水上项目。",
-    "muscles": [
-      "背阔肌",
-      "核心肌群",
-      "三角肌",
-      "肱三头肌"
-    ],
-    "impact": "低",
-    "intensity": "中-高",
-    "suitableFor": [
-      "团队协作",
-      "上肢力量耐力",
-      "赛事爱好者"
-    ],
-    "tips": "入水点靠前、发力与鼓点同步，拉桨靠转体而非蛮力。"
-  },
-  {
-    "id": "open-water-swimming",
-    "name": "公开水域游泳",
-    "aliases": [
-      "户外游泳",
-      "Open Water Swimming"
-    ],
-    "type": "cardio",
-    "method": "rowing-water",
-    "group": "水上类",
-    "summary": "在湖泊、海洋等自然水域长距离游泳，兼具耐力与导航挑战。",
-    "muscles": [
-      "背阔肌",
-      "三角肌",
-      "核心肌群",
-      "股四头肌"
-    ],
-    "impact": "低",
-    "intensity": "中-高",
-    "suitableFor": [
-      "进阶泳者",
-      "铁三训练",
-      "耐力挑战"
-    ],
-    "tips": "务必结伴并使用跟屁虫浮标，下水前确认水温与流向。"
-  },
-  {
     "id": "jump-rope",
     "name": "跳绳",
     "aliases": [
-      "跳大绳",
-      "Jump Rope"
+      "Jump Rope",
+      "花样跳绳"
     ],
     "type": "cardio",
     "method": "group-cardio",
     "group": "团课类",
-    "summary": "持绳连续跳跃的经典训练，单位时间消耗极高的便携有氧。",
+    "summary": "一根绳子就能做的高效有氧，从基础跳到双摇逐步进阶。",
     "muscles": [
       "小腿三头肌",
       "股四头肌",
-      "核心肌群",
-      "肩部肌群"
+      "核心"
     ],
     "impact": "高",
     "intensity": "中-高",
     "suitableFor": [
-      "高效燃脂",
-      "协调性",
-      "居家训练"
+      "减脂",
+      "心肺提升",
+      "协调性"
     ],
-    "tips": "前脚掌落地、跳起 2~3 厘米即可，硬地训练选缓震鞋。"
+    "tips": "绳长以单脚踩住、手柄到腋下为宜；在软质地面跳更护膝。",
+    "movements": [
+      {
+        "id": "jump-rope-basic",
+        "name": "基础跳绳",
+        "summary": "持绳连续跳跃的经典训练，单位时间消耗极高的便携有氧。",
+        "muscles": [
+          "小腿三头肌",
+          "股四头肌",
+          "核心",
+          "肩部"
+        ],
+        "intensity": "中-高",
+        "tips": "前脚掌落地、跳起 2~3 厘米即可，硬地训练选缓震鞋。"
+      },
+      {
+        "id": "double-unders",
+        "name": "跳绳双摇",
+        "summary": "一次起跳绳子绕脚两周，考验弹跳、节奏与协调。",
+        "muscles": [
+          "小腿三头肌",
+          "股四头肌",
+          "肩部",
+          "核心"
+        ],
+        "intensity": "高",
+        "tips": "用手腕摇绳而非甩臂，跳起高度略高于单摇即可。"
+      }
+    ]
   },
   {
     "id": "jumping-jack-workout",
@@ -829,7 +595,7 @@
       "三角肌",
       "股四头肌",
       "小腿三头肌",
-      "核心肌群"
+      "核心"
     ],
     "impact": "高",
     "intensity": "中",
@@ -853,7 +619,7 @@
     "group": "团课类",
     "summary": "融合拳击与踢腿动作的团课，跟随音乐进行高强度打击训练。",
     "muscles": [
-      "核心肌群",
+      "核心",
       "三角肌",
       "股四头肌",
       "臀大肌",
@@ -880,7 +646,7 @@
     "group": "团课类",
     "summary": "融合拉丁舞风格的有氧舞蹈课，在欢乐音乐中完成全身运动。",
     "muscles": [
-      "核心肌群",
+      "核心",
       "臀大肌",
       "股四头肌",
       "小腿三头肌"
@@ -908,7 +674,7 @@
     "muscles": [
       "股四头肌",
       "臀大肌",
-      "核心肌群",
+      "核心",
       "小腿三头肌"
     ],
     "impact": "中",
@@ -934,7 +700,7 @@
     "muscles": [
       "股四头肌",
       "臀大肌",
-      "核心肌群",
+      "核心",
       "胸大肌",
       "三角肌"
     ],
@@ -960,7 +726,7 @@
     "summary": "双手甩动重绳制造波浪，上肢主导的高强度间歇训练。",
     "muscles": [
       "三角肌",
-      "核心肌群",
+      "核心",
       "背阔肌",
       "肱二头肌",
       "前臂肌群"
@@ -975,21 +741,21 @@
     "tips": "屈髋微蹲、核心绷紧，用躯干带动而非单纯甩手臂。"
   },
   {
-    "id": "kettlebell-swing",
-    "name": "壶铃摆动",
+    "id": "kettlebell",
+    "name": "壶铃",
     "aliases": [
-      "壶铃摇摆",
-      "Kettlebell Swing"
+      "Kettlebell",
+      "壶铃训练"
     ],
-    "type": "cardio",
-    "method": "group-cardio",
-    "group": "团课类",
-    "summary": "髋部铰链驱动的壶铃摆荡，力量与心肺结合的经典动作。",
+    "type": "strength",
+    "method": "free-weights",
+    "group": "综合",
+    "summary": "重心外置的球形负重，摆动、深蹲、推举兼顾力量与心肺。",
     "muscles": [
       "臀大肌",
       "腘绳肌",
-      "核心肌群",
-      "背阔肌"
+      "核心",
+      "三角肌"
     ],
     "impact": "中",
     "intensity": "中-高",
@@ -998,7 +764,46 @@
       "燃脂",
       "爆发力训练"
     ],
-    "tips": "发力靠伸髋顶出而非手臂上抬，下放时保持背部平直。"
+    "tips": "先学会髋部铰链再加重量，摆动类动作保持背部平直。",
+    "movements": [
+      {
+        "id": "kettlebell-swing",
+        "name": "壶铃摆动",
+        "summary": "髋部铰链驱动的壶铃摆荡，力量与心肺结合的经典动作。",
+        "muscles": [
+          "臀大肌",
+          "腘绳肌",
+          "核心",
+          "背阔肌"
+        ],
+        "intensity": "中-高",
+        "tips": "发力靠伸髋顶出而非手臂上抬，下放时保持背部平直。"
+      },
+      {
+        "id": "kettlebell-goblet-squat",
+        "name": "壶铃高脚杯深蹲",
+        "summary": "双手捧壶铃于胸前做深蹲，强化下肢并顺带训练核心稳定。",
+        "muscles": [
+          "股四头肌",
+          "臀大肌",
+          "核心"
+        ],
+        "intensity": "低-中",
+        "tips": "肘部收于膝内侧，蹲到底时保持躯干直立不弓腰。"
+      },
+      {
+        "id": "kettlebell-press",
+        "name": "壶铃推举",
+        "summary": "单手持壶铃从肩前推至头顶，锻炼肩部并考验核心抗旋转。",
+        "muscles": [
+          "三角肌",
+          "肱三头肌",
+          "核心"
+        ],
+        "intensity": "中",
+        "tips": "壶铃稳置于前臂，推起时核心收紧避免身体侧倾。"
+      }
+    ]
   },
   {
     "id": "chest-press-machine",
@@ -1091,7 +896,7 @@
       "股四头肌",
       "臀大肌",
       "腘绳肌",
-      "小腿"
+      "小腿三头肌"
     ],
     "impact": "低",
     "intensity": "中-高",
@@ -1115,7 +920,7 @@
     "summary": "俯卧或坐姿屈膝勾腿，孤立训练腘绳肌。",
     "muscles": [
       "腘绳肌",
-      "小腿"
+      "小腿三头肌"
     ],
     "impact": "低",
     "intensity": "低-中",
@@ -1127,28 +932,55 @@
     "tips": "骨盆贴紧凳面，动作放慢感受后侧收缩。"
   },
   {
-    "id": "pec-deck",
-    "name": "坐姿夹胸机",
+    "id": "pec-deck-machine",
+    "name": "蝴蝶机",
     "aliases": [
-      "蝴蝶机",
-      "Pec Deck Fly"
+      "夹胸机",
+      "Pec Deck",
+      "反向飞鸟机"
     ],
     "type": "strength",
     "method": "fixed-equipment",
     "group": "推类",
-    "summary": "双臂内收做飞鸟夹胸，孤立刺激胸大肌。",
+    "summary": "正坐夹胸练胸，反坐飞鸟练肩后束，一台两用。",
     "muscles": [
       "胸大肌",
+      "三角肌后束",
       "三角肌前束"
     ],
     "impact": "低",
     "intensity": "低-中",
     "suitableFor": [
       "新手",
-      "胸肌塑形",
-      "泵感训练"
+      "孤立训练",
+      "塑形"
     ],
-    "tips": "手肘微屈保持固定角度，顶峰收缩停一秒。"
+    "tips": "先调座椅让把手与肩同高，全程肘部微屈固定。",
+    "movements": [
+      {
+        "id": "pec-deck",
+        "name": "坐姿夹胸",
+        "summary": "双臂内收做飞鸟夹胸，孤立刺激胸大肌。",
+        "muscles": [
+          "胸大肌",
+          "三角肌前束"
+        ],
+        "intensity": "低-中",
+        "tips": "手肘微屈保持固定角度，顶峰收缩停一秒。"
+      },
+      {
+        "id": "reverse-pec-deck",
+        "name": "蝴蝶机反向飞鸟",
+        "summary": "面朝椅背双臂向后展开，孤立训练三角肌后束与上背。",
+        "muscles": [
+          "三角肌后束",
+          "斜方肌中束",
+          "菱形肌"
+        ],
+        "intensity": "低-中",
+        "tips": "手肘微屈保持角度，后展时肩胛自然内收不耸肩。"
+      }
+    ]
   },
   {
     "id": "smith-machine",
@@ -1174,7 +1006,226 @@
       "无保护训练",
       "复合动作"
     ],
-    "tips": "轨迹固定，注意调整站位使动作自然不别扭。"
+    "tips": "轨迹固定，注意调整站位使动作自然不别扭。",
+    "movements": [
+      {
+        "id": "smith-squat",
+        "name": "史密斯深蹲",
+        "summary": "固定轨道下深蹲，便于安全地冲击大重量。",
+        "muscles": [
+          "股四头肌",
+          "臀大肌",
+          "腘绳肌"
+        ],
+        "intensity": "中-高",
+        "tips": "双脚略前于杠铃，下蹲时膝盖对准脚尖。"
+      },
+      {
+        "id": "smith-bench-press",
+        "name": "史密斯卧推",
+        "summary": "轨道固定的卧推，适合无保护时练胸。",
+        "muscles": [
+          "胸大肌",
+          "三角肌前束",
+          "肱三头肌"
+        ],
+        "intensity": "中-高",
+        "tips": "杠铃落点在胸中下部，肩胛收紧贴凳。"
+      },
+      {
+        "id": "smith-shoulder-press",
+        "name": "史密斯推肩",
+        "summary": "坐姿在轨道内推举，稳定地孤立肩部。",
+        "muscles": [
+          "三角肌",
+          "肱三头肌"
+        ],
+        "intensity": "中",
+        "tips": "凳背调至接近垂直，杠铃下放到下巴高度即可。"
+      }
+    ]
+  },
+  {
+    "id": "hack-squat-machine",
+    "name": "哈克深蹲机",
+    "aliases": [
+      "哈克机深蹲",
+      "Hack Squat Machine"
+    ],
+    "type": "strength",
+    "method": "fixed-equipment",
+    "group": "腿类",
+    "summary": "靠垫支撑沿固定轨迹下蹲，重点刺激股四头肌。",
+    "muscles": [
+      "股四头肌",
+      "臀大肌",
+      "腘绳肌"
+    ],
+    "impact": "低",
+    "intensity": "中-高",
+    "suitableFor": [
+      "腿部增肌",
+      "新手",
+      "深蹲替代"
+    ],
+    "tips": "双脚略靠前站，下蹲时膝盖与脚尖同向不锁死。"
+  },
+  {
+    "id": "leg-extension",
+    "name": "坐姿腿屈伸机",
+    "aliases": [
+      "腿屈伸机",
+      "Leg Extension"
+    ],
+    "type": "strength",
+    "method": "fixed-equipment",
+    "group": "腿类",
+    "summary": "坐姿伸直膝关节抬起负重，孤立训练股四头肌。",
+    "muscles": [
+      "股四头肌"
+    ],
+    "impact": "低",
+    "intensity": "低-中",
+    "suitableFor": [
+      "新手",
+      "腿部塑形",
+      "股四头肌孤立"
+    ],
+    "tips": "顶峰收缩停一秒，下放控制速度避免冲击膝盖。"
+  },
+  {
+    "id": "hip-abductor-machine",
+    "name": "髋外展训练机",
+    "aliases": [
+      "坐姿髋外展机",
+      "Hip Abductor Machine"
+    ],
+    "type": "strength",
+    "method": "fixed-equipment",
+    "group": "臀腿类",
+    "summary": "坐姿双膝向外推展开负重，针对臀中肌与臀部外侧。",
+    "muscles": [
+      "臀中肌",
+      "臀大肌"
+    ],
+    "impact": "低",
+    "intensity": "低-中",
+    "suitableFor": [
+      "臀部塑形",
+      "膝部稳定",
+      "新手"
+    ],
+    "tips": "背部贴紧靠垫，外展到最大幅度停一秒再回放。"
+  },
+  {
+    "id": "cable-crossover",
+    "name": "龙门架（绳索）",
+    "aliases": [
+      "绳索训练",
+      "Cable Machine",
+      "龙门架"
+    ],
+    "type": "strength",
+    "method": "fixed-equipment",
+    "group": "综合",
+    "summary": "滑轮高度可调，全程张力稳定，可做夹胸、下压、划船等多种动作。",
+    "muscles": [
+      "胸大肌",
+      "背阔肌",
+      "肱三头肌",
+      "核心"
+    ],
+    "impact": "低",
+    "intensity": "低-高",
+    "suitableFor": [
+      "新手",
+      "多角度塑形",
+      "全程张力训练"
+    ],
+    "tips": "根据动作调整滑轮高度，全程保持绳索张力不松。",
+    "movements": [
+      {
+        "id": "cable-fly",
+        "name": "绳索夹胸",
+        "summary": "两侧滑轮中间站位，双臂向内合拢夹胸，全程张力刺激胸大肌。",
+        "muscles": [
+          "胸大肌",
+          "三角肌前束"
+        ],
+        "intensity": "低-中",
+        "tips": "手肘微屈保持角度，顶峰收缩停一秒，回放控制速度。"
+      },
+      {
+        "id": "cable-tricep-pushdown",
+        "name": "绳索下压",
+        "summary": "高位滑轮握绳下压，孤立训练肱三头肌。",
+        "muscles": [
+          "肱三头肌"
+        ],
+        "intensity": "低-中",
+        "tips": "大臂贴紧身体固定不动，下压到底时充分伸肘。"
+      },
+      {
+        "id": "cable-row",
+        "name": "坐姿绳索划船",
+        "summary": "低位滑轮坐姿后拉，锻炼背阔肌与斜方肌中束。",
+        "muscles": [
+          "背阔肌",
+          "斜方肌中束",
+          "肱二头肌"
+        ],
+        "intensity": "低-高",
+        "tips": "挺胸收腹拉向肚脐方向，回放保持张力不耸肩。"
+      },
+      {
+        "id": "cable-face-pull",
+        "name": "绳索面拉",
+        "summary": "用绳索把手拉向面部，改善圆肩并强化肩后束。",
+        "muscles": [
+          "三角肌后束",
+          "斜方肌中束",
+          "肩袖肌群"
+        ],
+        "intensity": "低-中",
+        "tips": "绳索与眼同高，拉到脸侧时双手向外分开。"
+      },
+      {
+        "id": "pallof-press",
+        "name": "帕洛夫推举",
+        "summary": "侧对弹力带或绳索将手柄向前推出，抗旋转稳定核心。",
+        "muscles": [
+          "腹斜肌",
+          "腹横肌",
+          "肩部"
+        ],
+        "intensity": "低-中",
+        "tips": "推出时抵抗侧向拉力，躯干不被带偏，速度放慢。"
+      }
+    ]
+  },
+  {
+    "id": "ab-crunch-machine",
+    "name": "坐姿卷腹机",
+    "aliases": [
+      "器械卷腹",
+      "Ab Crunch Machine"
+    ],
+    "type": "strength",
+    "method": "fixed-equipment",
+    "group": "核心类",
+    "summary": "坐姿负重向前卷腹，为腹肌提供可加量的阻力训练。",
+    "muscles": [
+      "腹直肌",
+      "腹斜肌"
+    ],
+    "impact": "低",
+    "intensity": "低-中",
+    "suitableFor": [
+      "腹肌增肌",
+      "新手",
+      "负重核心训练"
+    ],
+    "tips": "卷动时呼气收紧腹部，避免用颈部和手臂发力。"
   },
   {
     "id": "shoulder-press-machine",
@@ -1202,209 +1253,281 @@
     "tips": "座椅调到把手与耳垂齐平，上推时核心收紧。"
   },
   {
-    "id": "barbell-back-squat",
-    "name": "杠铃深蹲",
+    "id": "barbell",
+    "name": "杠铃",
     "aliases": [
-      "颈后深蹲",
-      "Barbell Back Squat"
+      "Barbell",
+      "杠铃训练"
     ],
     "type": "strength",
     "method": "free-weights",
-    "group": "腿类",
-    "summary": "杠铃置于上背做深蹲，训练下肢与核心的王牌动作。",
+    "group": "综合",
+    "summary": "健身房核心自由重量，深蹲、卧推、硬拉等复合动作的基础。",
     "muscles": [
       "股四头肌",
       "臀大肌",
-      "腘绳肌",
-      "核心"
-    ],
-    "impact": "高",
-    "intensity": "中-高",
-    "suitableFor": [
-      "下肢增肌",
-      "力量提升",
-      "进阶训练"
-    ],
-    "tips": "下蹲时膝盖对准脚尖方向，背部保持中立。"
-  },
-  {
-    "id": "barbell-bench-press",
-    "name": "杠铃卧推",
-    "aliases": [
-      "平板卧推",
-      "Barbell Bench Press"
-    ],
-    "type": "strength",
-    "method": "free-weights",
-    "group": "推类",
-    "summary": "仰卧推起杠铃，发展胸肌与上肢推力的经典动作。",
-    "muscles": [
       "胸大肌",
-      "三角肌前束",
-      "肱三头肌"
-    ],
-    "impact": "中",
-    "intensity": "中-高",
-    "suitableFor": [
-      "上肢增肌",
-      "力量提升",
-      "胸肌训练"
-    ],
-    "tips": "杠铃下放到乳头连线，双脚踩实、肩胛下沉。"
-  },
-  {
-    "id": "deadlift",
-    "name": "硬拉",
-    "aliases": [
-      "传统硬拉",
-      "Deadlift"
-    ],
-    "type": "strength",
-    "method": "free-weights",
-    "group": "拉类",
-    "summary": "从地面拉起杠铃至站立，全身性力量训练动作。",
-    "muscles": [
-      "腘绳肌",
-      "臀大肌",
-      "竖脊肌",
       "背阔肌",
-      "核心"
+      "三角肌"
     ],
     "impact": "高",
     "intensity": "中-高",
     "suitableFor": [
       "力量提升",
-      "后侧链强化",
-      "全身训练"
-    ],
-    "tips": "挺胸沉肩，用腿蹬地发力，杠铃贴腿上升。"
-  },
-  {
-    "id": "dumbbell-shoulder-press",
-    "name": "哑铃推肩",
-    "aliases": [
-      "坐姿哑铃推举",
-      "Dumbbell Shoulder Press"
-    ],
-    "type": "strength",
-    "method": "free-weights",
-    "group": "推类",
-    "summary": "双手持哑铃向上推举，塑造肩部围度与力量。",
-    "muscles": [
-      "三角肌",
-      "肱三头肌",
-      "核心"
-    ],
-    "impact": "中",
-    "intensity": "低-高",
-    "suitableFor": [
-      "肩部塑形",
-      "上肢增肌",
-      "居家训练"
-    ],
-    "tips": "上推时哑铃不要碰撞，下落控制至耳垂高度。"
-  },
-  {
-    "id": "dumbbell-row",
-    "name": "哑铃划船",
-    "aliases": [
-      "单臂哑铃划船",
-      "Dumbbell Row"
-    ],
-    "type": "strength",
-    "method": "free-weights",
-    "group": "拉类",
-    "summary": "俯身单臂向后拉起哑铃，锻炼背阔肌与背部厚度。",
-    "muscles": [
-      "背阔肌",
-      "斜方肌中束",
-      "肱二头肌"
-    ],
-    "impact": "中",
-    "intensity": "低-高",
-    "suitableFor": [
-      "背部增肌",
-      "体态改善",
-      "居家训练"
-    ],
-    "tips": "背部放平不弓腰，肘部贴着身体向后上方拉。"
-  },
-  {
-    "id": "overhead-press",
-    "name": "杠铃推举",
-    "aliases": [
-      "站姿肩推",
-      "Overhead Press"
-    ],
-    "type": "strength",
-    "method": "free-weights",
-    "group": "推类",
-    "summary": "站姿将杠铃从锁骨推至头顶，强化肩部与核心稳定。",
-    "muscles": [
-      "三角肌",
-      "肱三头肌",
-      "核心",
-      "斜方肌上束"
-    ],
-    "impact": "中",
-    "intensity": "中-高",
-    "suitableFor": [
-      "力量提升",
-      "肩部增肌",
+      "全身增肌",
       "进阶训练"
     ],
-    "tips": "臀肌与腹部收紧，推起后头部自然前送。"
+    "tips": "先掌握动作模式再加重量，复合动作注意核心收紧与呼吸配合。",
+    "movements": [
+      {
+        "id": "barbell-back-squat",
+        "name": "杠铃深蹲",
+        "summary": "杠铃置于上背做深蹲，训练下肢与核心的王牌动作。",
+        "muscles": [
+          "股四头肌",
+          "臀大肌",
+          "腘绳肌",
+          "核心"
+        ],
+        "intensity": "中-高",
+        "tips": "下蹲时膝盖对准脚尖方向，背部保持中立。"
+      },
+      {
+        "id": "barbell-bench-press",
+        "name": "杠铃卧推",
+        "summary": "仰卧推起杠铃，发展胸肌与上肢推力的经典动作。",
+        "muscles": [
+          "胸大肌",
+          "三角肌前束",
+          "肱三头肌"
+        ],
+        "intensity": "中-高",
+        "tips": "杠铃下放到乳头连线，双脚踩实、肩胛下沉。"
+      },
+      {
+        "id": "deadlift",
+        "name": "硬拉",
+        "summary": "从地面拉起杠铃至站立，全身性力量训练动作。",
+        "muscles": [
+          "腘绳肌",
+          "臀大肌",
+          "竖脊肌",
+          "背阔肌",
+          "核心"
+        ],
+        "intensity": "中-高",
+        "tips": "挺胸沉肩，用腿蹬地发力，杠铃贴腿上升。"
+      },
+      {
+        "id": "barbell-row",
+        "name": "杠铃划船",
+        "summary": "俯身约 45 度将杠铃拉向腹部，增加背部厚度的基础动作。",
+        "muscles": [
+          "背阔肌",
+          "斜方肌中束",
+          "菱形肌",
+          "肱二头肌"
+        ],
+        "intensity": "中-高",
+        "tips": "背部保持平直，肘部贴身向后拉，避免借力甩腰。"
+      },
+      {
+        "id": "overhead-press",
+        "name": "杠铃推举",
+        "summary": "站姿将杠铃从锁骨推至头顶，强化肩部与核心稳定。",
+        "muscles": [
+          "三角肌",
+          "肱三头肌",
+          "核心",
+          "斜方肌上束"
+        ],
+        "intensity": "中-高",
+        "tips": "臀肌与腹部收紧，推起后头部自然前送。"
+      },
+      {
+        "id": "barbell-curl",
+        "name": "杠铃弯举",
+        "summary": "站姿双手握杠弯举，可承载较大重量的肱二头肌训练。",
+        "muscles": [
+          "肱二头肌",
+          "肱肌",
+          "前臂肌群"
+        ],
+        "intensity": "中",
+        "tips": "上臂贴紧躯干不前后摆动，下放控制速度。"
+      },
+      {
+        "id": "romanian-deadlift",
+        "name": "罗马尼亚硬拉",
+        "summary": "髋部后移下放杠铃至小腿，重点刺激腘绳肌与臀肌。",
+        "muscles": [
+          "腘绳肌",
+          "臀大肌",
+          "竖脊肌",
+          "核心"
+        ],
+        "intensity": "中-高",
+        "tips": "膝盖微屈保持不动，感受大腿后侧被拉长。"
+      },
+      {
+        "id": "incline-bench-press",
+        "name": "上斜卧推",
+        "summary": "在上斜凳上推起杠铃或哑铃，重点刺激上胸部。",
+        "muscles": [
+          "胸大肌",
+          "三角肌前束",
+          "肱三头肌"
+        ],
+        "intensity": "中-高",
+        "tips": "凳面角度 30~45 度，杠铃下放到上胸锁骨下方。"
+      },
+      {
+        "id": "hip-thrust",
+        "name": "杠铃臀推",
+        "summary": "上背靠凳、髋部负重向上顶起，顶峰收缩臀大肌。",
+        "muscles": [
+          "臀大肌",
+          "腘绳肌",
+          "核心"
+        ],
+        "intensity": "中-高",
+        "tips": "顶峰时髋部完全伸展停一秒，下巴微收不后仰。"
+      }
+    ]
   },
   {
-    "id": "dumbbell-curl",
-    "name": "哑铃弯举",
+    "id": "dumbbell",
+    "name": "哑铃",
     "aliases": [
-      "二头弯举",
-      "Dumbbell Bicep Curl"
+      "Dumbbell",
+      "哑铃训练"
     ],
     "type": "strength",
     "method": "free-weights",
-    "group": "拉类",
-    "summary": "手持哑铃屈肘弯举，孤立训练肱二头肌。",
+    "group": "综合",
+    "summary": "灵活多变的自由重量，单侧与孤立动作皆宜，居家健身房都适用。",
     "muscles": [
+      "三角肌",
       "肱二头肌",
-      "肱肌",
-      "前臂肌群"
-    ],
-    "impact": "低",
-    "intensity": "低-中",
-    "suitableFor": [
-      "手臂塑形",
-      "新手",
-      "居家训练"
-    ],
-    "tips": "大臂固定不动，顶峰收缩后缓慢下放。"
-  },
-  {
-    "id": "romanian-deadlift",
-    "name": "罗马尼亚硬拉",
-    "aliases": [
-      "RDL",
-      "Romanian Deadlift"
-    ],
-    "type": "strength",
-    "method": "free-weights",
-    "group": "腿类",
-    "summary": "髋部后移下放杠铃至小腿，重点刺激腘绳肌与臀肌。",
-    "muscles": [
-      "腘绳肌",
-      "臀大肌",
-      "竖脊肌",
-      "核心"
+      "背阔肌",
+      "胸大肌",
+      "股四头肌"
     ],
     "impact": "中",
-    "intensity": "中-高",
+    "intensity": "低-高",
     "suitableFor": [
-      "后侧链强化",
-      "臀部塑形",
-      "硬拉辅助"
+      "新手",
+      "居家训练",
+      "上肢塑形"
     ],
-    "tips": "膝盖微屈保持不动，感受大腿后侧被拉长。"
+    "tips": "单侧动作注意两侧均衡，重量以动作不变形为准。",
+    "movements": [
+      {
+        "id": "dumbbell-shoulder-press",
+        "name": "哑铃推肩",
+        "summary": "双手持哑铃向上推举，塑造肩部围度与力量。",
+        "muscles": [
+          "三角肌",
+          "肱三头肌",
+          "核心"
+        ],
+        "intensity": "低-高",
+        "tips": "上推时哑铃不要碰撞，下落控制至耳垂高度。"
+      },
+      {
+        "id": "dumbbell-row",
+        "name": "哑铃划船",
+        "summary": "俯身单臂向后拉起哑铃，锻炼背阔肌与背部厚度。",
+        "muscles": [
+          "背阔肌",
+          "斜方肌中束",
+          "肱二头肌"
+        ],
+        "intensity": "低-高",
+        "tips": "背部放平不弓腰，肘部贴着身体向后上方拉。"
+      },
+      {
+        "id": "dumbbell-curl",
+        "name": "哑铃弯举",
+        "summary": "手持哑铃屈肘弯举，孤立训练肱二头肌。",
+        "muscles": [
+          "肱二头肌",
+          "肱肌",
+          "前臂肌群"
+        ],
+        "intensity": "低-中",
+        "tips": "大臂固定不动，顶峰收缩后缓慢下放。"
+      },
+      {
+        "id": "dumbbell-fly",
+        "name": "哑铃飞鸟",
+        "summary": "仰卧双臂展开再合拢，拉伸并收缩胸大肌。",
+        "muscles": [
+          "胸大肌",
+          "三角肌前束"
+        ],
+        "intensity": "低-中",
+        "tips": "手肘微屈固定角度，下放到胸肌有拉伸感即可。"
+      },
+      {
+        "id": "incline-dumbbell-curl",
+        "name": "上斜哑铃弯举",
+        "summary": "仰卧于上斜凳弯举哑铃，重点拉伸肱二头肌长头。",
+        "muscles": [
+          "肱二头肌",
+          "肱肌",
+          "前臂肌群"
+        ],
+        "intensity": "低-中",
+        "tips": "大臂垂直地面保持不动，下放时充分拉伸不要借力。"
+      },
+      {
+        "id": "bulgarian-split-squat",
+        "name": "保加利亚分腿蹲",
+        "summary": "手持哑铃、后脚置于凳上单腿下蹲，单侧强化腿部与臀部。",
+        "muscles": [
+          "股四头肌",
+          "臀大肌",
+          "腘绳肌",
+          "核心"
+        ],
+        "intensity": "中-高",
+        "tips": "前脚站距以小腿接近垂直为准，躯干略前倾更练臀。"
+      },
+      {
+        "id": "dumbbell-bench-press",
+        "name": "哑铃卧推",
+        "summary": "双手持铃仰卧推起，行程比杠铃更大。",
+        "muscles": [
+          "胸大肌",
+          "三角肌前束",
+          "肱三头肌"
+        ],
+        "intensity": "中-高",
+        "tips": "下放到胸部两侧略低于胸平面，推起时两铃向中间靠拢。"
+      },
+      {
+        "id": "dumbbell-lateral-raise",
+        "name": "哑铃侧平举",
+        "summary": "双臂向两侧抬起至与肩平，塑造肩部宽度。",
+        "muscles": [
+          "三角肌中束",
+          "斜方肌上束"
+        ],
+        "intensity": "低-中",
+        "tips": "用轻重量、肘部微屈，抬到肩高即止，不要耸肩。"
+      },
+      {
+        "id": "dumbbell-overhead-extension",
+        "name": "哑铃颈后臂屈伸",
+        "summary": "双手托一只哑铃在头后屈伸，孤立肱三头肌。",
+        "muscles": [
+          "肱三头肌"
+        ],
+        "intensity": "低-中",
+        "tips": "上臂贴近耳朵保持不动，只动小臂。"
+      }
+    ]
   },
   {
     "id": "push-up",
@@ -1433,29 +1556,79 @@
     "tips": "身体成一条直线，下放至胸部接近地面。"
   },
   {
-    "id": "pull-up",
-    "name": "引体向上",
+    "id": "pull-up-bar",
+    "name": "单杠",
     "aliases": [
-      "正握引体",
-      "Pull-up"
+      "引体向上杆",
+      "Pull-up Bar"
     ],
     "type": "strength",
     "method": "bodyweight",
     "group": "拉类",
-    "summary": "悬垂拉起身体至下巴过杠，训练背阔肌与上肢拉力。",
+    "summary": "只用自身体重，练背、练手臂、练下腹都靠它。",
     "muscles": [
       "背阔肌",
       "肱二头肌",
-      "核心"
+      "腹直肌"
     ],
     "impact": "低",
     "intensity": "中-高",
     "suitableFor": [
-      "进阶训练",
-      "背部塑形",
-      "上肢力量"
+      "家庭训练",
+      "背部力量",
+      "进阶训练"
     ],
-    "tips": "避免摆动借力，做不了可先用弹力带辅助。"
+    "tips": "做不起来先用弹力带辅助或离心下放，避免甩身借力。",
+    "movements": [
+      {
+        "id": "pull-up",
+        "name": "引体向上",
+        "summary": "悬垂拉起身体至下巴过杠，训练背阔肌与上肢拉力。",
+        "muscles": [
+          "背阔肌",
+          "肱二头肌",
+          "核心"
+        ],
+        "intensity": "中-高",
+        "tips": "避免摆动借力，做不了可先用弹力带辅助。"
+      },
+      {
+        "id": "hanging-leg-raise",
+        "name": "悬垂举腿",
+        "summary": "悬垂于单杠上抬起双腿，重点刺激下腹与髋屈肌。",
+        "muscles": [
+          "腹直肌",
+          "髋屈肌",
+          "核心"
+        ],
+        "intensity": "中-高",
+        "tips": "避免摆动借力，抬腿时骨盆微微后卷更有效。"
+      },
+      {
+        "id": "chin-up",
+        "name": "反手引体向上",
+        "summary": "掌心朝向自己握杠，更多调动肱二头肌。",
+        "muscles": [
+          "背阔肌",
+          "肱二头肌",
+          "肱肌"
+        ],
+        "intensity": "中-高",
+        "tips": "肩与肘同宽握杠，拉至下巴过杠再控制下放。"
+      },
+      {
+        "id": "dead-hang",
+        "name": "悬垂",
+        "summary": "双手握杠自然悬挂，提升握力并放松肩部。",
+        "muscles": [
+          "前臂肌群",
+          "背阔肌",
+          "肩部稳定肌"
+        ],
+        "intensity": "低-中",
+        "tips": "肩胛轻微下沉，不要完全耸肩吊着。"
+      }
+    ]
   },
   {
     "id": "bodyweight-squat",
@@ -1610,94 +1783,98 @@
     "tips": "顶峰时收紧臀部停一秒，避免腰部代偿拱起。"
   },
   {
-    "id": "resistance-band-row",
-    "name": "弹力带划船",
+    "id": "resistance-band",
+    "name": "弹力带",
     "aliases": [
-      "坐姿弹力带划船",
-      "Resistance Band Row"
+      "Resistance Band",
+      "阻力带",
+      "弹力绳"
     ],
     "type": "strength",
     "method": "resistance-tools",
-    "group": "拉类",
-    "summary": "踩住弹力带向后拉，模拟划船锻炼背部肌群。",
+    "group": "综合",
+    "summary": "轻便易携的可变阻力工具，划船、平举、深蹲等动作随时开练。",
     "muscles": [
       "背阔肌",
-      "斜方肌中束",
-      "肱二头肌"
-    ],
-    "impact": "低",
-    "intensity": "低-中",
-    "suitableFor": [
-      "新手",
-      "居家训练",
-      "体态改善"
-    ],
-    "tips": "拉向肚脐方向，回放时保持带子张力不松垮。"
-  },
-  {
-    "id": "resistance-band-lateral-raise",
-    "name": "弹力带侧平举",
-    "aliases": [
-      "弹力带侧举",
-      "Band Lateral Raise"
-    ],
-    "type": "strength",
-    "method": "resistance-tools",
-    "group": "推类",
-    "summary": "踩住弹力带向两侧平举手臂，孤立训练三角肌中束。",
-    "muscles": [
       "三角肌中束",
-      "斜方肌上束"
+      "臀大肌",
+      "股四头肌"
     ],
     "impact": "低",
-    "intensity": "低",
-    "suitableFor": [
-      "肩部塑形",
-      "新手",
-      "热身激活"
-    ],
-    "tips": "举到肩高即可，避免耸肩，缓慢下放。"
-  },
-  {
-    "id": "resistance-band-squat",
-    "name": "弹力带深蹲",
-    "aliases": [
-      "弹力带肩托深蹲",
-      "Band Squat"
-    ],
-    "type": "strength",
-    "method": "resistance-tools",
-    "group": "腿类",
-    "summary": "踩带扛肩增加深蹲阻力，居家强化下肢力量。",
-    "muscles": [
-      "股四头肌",
-      "臀大肌",
-      "核心"
-    ],
-    "impact": "中",
     "intensity": "低-中",
     "suitableFor": [
       "新手",
       "居家训练",
-      "腿部塑形"
+      "差旅训练"
     ],
-    "tips": "选择合适磅数，站起时保持带子张力均匀。"
+    "tips": "选合适磅数，全程保持带子张力，回放时控制速度。",
+    "movements": [
+      {
+        "id": "resistance-band-row",
+        "name": "弹力带划船",
+        "summary": "踩住弹力带向后拉，模拟划船锻炼背部肌群。",
+        "muscles": [
+          "背阔肌",
+          "斜方肌中束",
+          "肱二头肌"
+        ],
+        "intensity": "低-中",
+        "tips": "拉向肚脐方向，回放时保持带子张力不松垮。"
+      },
+      {
+        "id": "resistance-band-lateral-raise",
+        "name": "弹力带侧平举",
+        "summary": "踩住弹力带向两侧平举手臂，孤立训练三角肌中束。",
+        "muscles": [
+          "三角肌中束",
+          "斜方肌上束"
+        ],
+        "intensity": "低",
+        "tips": "举到肩高即可，避免耸肩，缓慢下放。"
+      },
+      {
+        "id": "resistance-band-squat",
+        "name": "弹力带深蹲",
+        "summary": "踩带扛肩增加深蹲阻力，居家强化下肢力量。",
+        "muscles": [
+          "股四头肌",
+          "臀大肌",
+          "核心"
+        ],
+        "intensity": "低-中",
+        "tips": "选择合适磅数，站起时保持带子张力均匀。"
+      },
+      {
+        "id": "mini-band-lateral-walk",
+        "name": "迷你带侧走",
+        "summary": "弹力带套在膝上或踝部，半蹲横向行走，针对臀中肌。",
+        "muscles": [
+          "臀中肌",
+          "臀大肌",
+          "股四头肌"
+        ],
+        "intensity": "低-中",
+        "tips": "膝盖始终对准脚尖方向，小步慢走保持张力。"
+      }
+    ]
   },
   {
-    "id": "trx-row",
-    "name": "TRX 划船",
+    "id": "trx",
+    "name": "TRX 悬挂训练带",
     "aliases": [
-      "悬吊带划船",
-      "TRX Row"
+      "TRX",
+      "悬吊训练",
+      "悬挂训练带"
     ],
     "type": "strength",
     "method": "resistance-tools",
-    "group": "拉类",
-    "summary": "握悬吊带身体后倾做划船，难度随角度调节。",
+    "group": "综合",
+    "summary": "利用自身体重与角度的悬吊训练，划船、俯卧撑、深蹲难度随手可调。",
     "muscles": [
       "背阔肌",
-      "肱二头肌",
-      "核心"
+      "核心",
+      "股四头肌",
+      "胸大肌"
     ],
     "impact": "低",
     "intensity": "低-中",
@@ -1706,58 +1883,109 @@
       "居家训练",
       "核心强化"
     ],
-    "tips": "身体越接近水平越难，全程保持躯干一条直线。"
+    "tips": "身体越接近水平越难，全程保持躯干一条直线、带子不松。",
+    "movements": [
+      {
+        "id": "trx-row",
+        "name": "TRX 划船",
+        "summary": "握悬吊带身体后倾做划船，难度随角度调节。",
+        "muscles": [
+          "背阔肌",
+          "肱二头肌",
+          "核心"
+        ],
+        "intensity": "低-中",
+        "tips": "身体越接近水平越难，全程保持躯干一条直线。"
+      },
+      {
+        "id": "trx-push-up",
+        "name": "TRX 俯卧撑",
+        "summary": "手握悬吊带做俯卧撑，不稳定性加倍刺激胸部与核心。",
+        "muscles": [
+          "胸大肌",
+          "三角肌前束",
+          "核心"
+        ],
+        "intensity": "中",
+        "tips": "先跪姿适应晃动，全程收紧核心防止塌腰。"
+      },
+      {
+        "id": "trx-squat",
+        "name": "TRX 深蹲",
+        "summary": "握带辅助平衡做深蹲，可放心下沉重心练习动作模式。",
+        "muscles": [
+          "股四头肌",
+          "臀大肌"
+        ],
+        "intensity": "低-中",
+        "tips": "手臂轻拉保持直立，臀部向后坐，膝盖对准脚尖。"
+      }
+    ]
   },
   {
-    "id": "medicine-ball-slam",
-    "name": "药球砸地",
+    "id": "medicine-ball",
+    "name": "药球",
     "aliases": [
-      "重力球下砸",
-      "Medicine Ball Slam"
+      "Medicine Ball",
+      "实心球"
     ],
     "type": "strength",
     "method": "resistance-tools",
     "group": "综合",
-    "summary": "举球过头顶用力砸向地面，训练爆发力与核心。",
+    "summary": "可砸、可抛、可转体的实心负重球，偏爆发与核心。",
     "muscles": [
       "核心",
       "背阔肌",
-      "肩部",
-      "臀大肌"
+      "三角肌",
+      "胸大肌"
     ],
     "impact": "中",
     "intensity": "中-高",
     "suitableFor": [
       "爆发力训练",
-      "体能提升",
-      "心肺加练"
+      "核心强化",
+      "燃脂"
     ],
-    "tips": "用全身力量下砸，接球时屈髋缓冲保护腰背。"
-  },
-  {
-    "id": "mini-band-lateral-walk",
-    "name": "迷你带侧走",
-    "aliases": [
-      "弹力带侧向走",
-      "Monster Walk"
-    ],
-    "type": "strength",
-    "method": "resistance-tools",
-    "group": "臀腿类",
-    "summary": "弹力带套在膝上或踝部，半蹲横向行走，针对臀中肌。",
-    "muscles": [
-      "臀中肌",
-      "臀大肌",
-      "股四头肌"
-    ],
-    "impact": "低",
-    "intensity": "低-中",
-    "suitableFor": [
-      "臀部激活",
-      "膝部稳定",
-      "热身"
-    ],
-    "tips": "膝盖始终对准脚尖方向，小步慢走保持张力。"
+    "tips": "选择不反弹的砸球做砸地；抛接类动作确认周围无人。",
+    "movements": [
+      {
+        "id": "medicine-ball-slam",
+        "name": "药球砸地",
+        "summary": "举球过头顶用力砸向地面，训练爆发力与核心。",
+        "muscles": [
+          "核心",
+          "背阔肌",
+          "肩部",
+          "臀大肌"
+        ],
+        "intensity": "中-高",
+        "tips": "用全身力量下砸，接球时屈髋缓冲保护腰背。"
+      },
+      {
+        "id": "medicine-ball-russian-twist",
+        "name": "药球俄罗斯转体",
+        "summary": "坐姿后仰持球左右转体，强化腹斜肌。",
+        "muscles": [
+          "腹斜肌",
+          "腹直肌",
+          "核心"
+        ],
+        "intensity": "中",
+        "tips": "转动来自胸廓而非手臂，下背保持挺直。"
+      },
+      {
+        "id": "medicine-ball-chest-pass",
+        "name": "药球胸前推",
+        "summary": "对墙或搭档快速推球，发展上肢推的爆发力。",
+        "muscles": [
+          "胸大肌",
+          "肱三头肌",
+          "三角肌前束"
+        ],
+        "intensity": "中-高",
+        "tips": "蹬地转髋带动推出，接球时顺势缓冲。"
+      }
+    ]
   },
   {
     "id": "worlds-greatest-stretch",
@@ -1784,31 +2012,6 @@
       "全身激活"
     ],
     "tips": "转体时用手肘带动，保持后腿伸直、呼吸顺畅。"
-  },
-  {
-    "id": "inchworm",
-    "name": "毛毛虫爬行",
-    "aliases": [
-      "尺蠖爬行",
-      "Inchworm"
-    ],
-    "type": "mobility",
-    "method": "dynamic-stretching",
-    "group": "动态拉伸",
-    "summary": "从站立俯身双手爬出至平板位再收回，动态热身全身。",
-    "muscles": [
-      "腘绳肌",
-      "核心",
-      "肩部",
-      "小腿"
-    ],
-    "impact": "低",
-    "intensity": "低-中",
-    "suitableFor": [
-      "训练前热身",
-      "核心激活"
-    ],
-    "tips": "膝盖可微屈，爬出时避免腰部塌陷。"
   },
   {
     "id": "lunge-with-twist",
@@ -1898,7 +2101,7 @@
     "muscles": [
       "腘绳肌",
       "下背部",
-      "小腿"
+      "小腿三头肌"
     ],
     "impact": "低",
     "intensity": "低",
@@ -2020,7 +2223,7 @@
     "summary": "双手撑地臀部上提呈倒 V 形，延展全身后侧链。",
     "muscles": [
       "腘绳肌",
-      "小腿",
+      "小腿三头肌",
       "肩部",
       "背部"
     ],
@@ -2208,53 +2411,78 @@
     "tips": "前卷时从头顶开始逐节弯曲，回正时逐节堆叠。"
   },
   {
-    "id": "foam-roll-calves",
-    "name": "泡沫轴小腿放松",
+    "id": "foam-roller",
+    "name": "泡沫轴",
     "aliases": [
-      "滚小腿",
-      "Foam Roll Calves"
+      "Foam Roller",
+      "瑜伽柱"
     ],
     "type": "mobility",
     "method": "release",
     "group": "放松",
-    "summary": "坐地将小腿置于泡沫轴上来回滚动，放松小腿三头肌。",
+    "summary": "训练前后滚压肌肉筋膜，缓解紧张、提升活动度。",
     "muscles": [
-      "腓肠肌",
-      "比目鱼肌"
-    ],
-    "impact": "低",
-    "intensity": "低",
-    "suitableFor": [
-      "跑者",
-      "训练后恢复",
-      "小腿紧绷"
-    ],
-    "tips": "找到酸痛点停留 20~30 秒，双腿交叠可加压力。"
-  },
-  {
-    "id": "foam-roll-thoracic",
-    "name": "泡沫轴胸椎放松",
-    "aliases": [
-      "滚上背",
-      "Foam Roll Thoracic Spine"
-    ],
-    "type": "mobility",
-    "method": "release",
-    "group": "放松",
-    "summary": "仰卧将泡沫轴置于上背，滚动并伸展胸椎改善僵硬。",
-    "muscles": [
-      "胸椎",
+      "小腿三头肌",
       "竖脊肌",
-      "背阔肌"
+      "髂胫束",
+      "股四头肌"
     ],
     "impact": "低",
     "intensity": "低",
     "suitableFor": [
-      "伏案人群",
-      "胸椎僵硬",
-      "体态改善"
+      "训练后恢复",
+      "久坐人群",
+      "热身"
     ],
-    "tips": "双手抱头支撑颈部，避免直接滚动腰椎。"
+    "tips": "每个部位慢滚 30-60 秒，遇到痛点停留呼吸，不压骨头与关节。",
+    "movements": [
+      {
+        "id": "foam-roll-calves",
+        "name": "泡沫轴小腿放松",
+        "summary": "坐地将小腿置于泡沫轴上来回滚动，放松小腿三头肌。",
+        "muscles": [
+          "腓肠肌",
+          "比目鱼肌"
+        ],
+        "intensity": "低",
+        "tips": "找到酸痛点停留 20~30 秒，双腿交叠可加压力。"
+      },
+      {
+        "id": "foam-roll-thoracic",
+        "name": "泡沫轴胸椎放松",
+        "summary": "仰卧将泡沫轴置于上背，滚动并伸展胸椎改善僵硬。",
+        "muscles": [
+          "胸椎",
+          "竖脊肌",
+          "背阔肌"
+        ],
+        "intensity": "低",
+        "tips": "双手抱头支撑颈部，避免直接滚动腰椎。"
+      },
+      {
+        "id": "foam-roll-it-band",
+        "name": "泡沫轴髂胫束放松",
+        "summary": "侧卧滚动大腿外侧，放松髂胫束与阔筋膜张肌。",
+        "muscles": [
+          "髂胫束",
+          "阔筋膜张肌",
+          "股外侧肌"
+        ],
+        "intensity": "低-中",
+        "tips": "上方腿撑地分担体重，滚动速度放慢避开膝关节。"
+      },
+      {
+        "id": "foam-roll-quads",
+        "name": "泡沫轴大腿前侧放松",
+        "summary": "俯卧将泡沫轴置于大腿前侧来回滚动。",
+        "muscles": [
+          "股四头肌",
+          "髋屈肌"
+        ],
+        "intensity": "低",
+        "tips": "用前臂支撑控制压力，腰部不要塌。"
+      }
+    ]
   },
   {
     "id": "lacrosse-ball-foot",
@@ -2279,31 +2507,6 @@
       "足底疲劳"
     ],
     "tips": "靠墙控制压力，从脚跟到前掌缓慢滚动约一分钟。"
-  },
-  {
-    "id": "foam-roll-it-band",
-    "name": "泡沫轴髂胫束放松",
-    "aliases": [
-      "滚大腿外侧",
-      "Foam Roll IT Band"
-    ],
-    "type": "mobility",
-    "method": "release",
-    "group": "放松",
-    "summary": "侧卧滚动大腿外侧，放松髂胫束与阔筋膜张肌。",
-    "muscles": [
-      "髂胫束",
-      "阔筋膜张肌",
-      "股外侧肌"
-    ],
-    "impact": "低",
-    "intensity": "低-中",
-    "suitableFor": [
-      "跑者",
-      "膝外侧不适",
-      "下肢恢复"
-    ],
-    "tips": "上方腿撑地分担体重，滚动速度放慢避开膝关节。"
   },
   {
     "id": "single-leg-stand",
@@ -2485,31 +2688,6 @@
     "tips": "身体成一条直线，髋部不下沉，可从屈膝版开始。"
   },
   {
-    "id": "pallof-press",
-    "name": "帕洛夫推举",
-    "aliases": [
-      "抗旋转推举",
-      "Pallof Press"
-    ],
-    "type": "neuromotor",
-    "method": "core-stability",
-    "group": "核心",
-    "summary": "侧对弹力带或绳索将手柄向前推出，抗旋转稳定核心。",
-    "muscles": [
-      "腹斜肌",
-      "腹横肌",
-      "肩部"
-    ],
-    "impact": "低",
-    "intensity": "低-中",
-    "suitableFor": [
-      "抗旋转训练",
-      "运动表现",
-      "核心强化"
-    ],
-    "tips": "推出时抵抗侧向拉力，躯干不被带偏，速度放慢。"
-  },
-  {
     "id": "agility-ladder",
     "name": "敏捷梯训练",
     "aliases": [
@@ -2521,7 +2699,7 @@
     "group": "敏捷",
     "summary": "在绳梯上完成快进快出等步法，提升脚步协调与频率。",
     "muscles": [
-      "小腿",
+      "小腿三头肌",
       "股四头肌",
       "髋屈肌",
       "核心"
@@ -2549,7 +2727,7 @@
     "muscles": [
       "股四头肌",
       "腘绳肌",
-      "小腿",
+      "小腿三头肌",
       "臀肌"
     ],
     "impact": "高",
@@ -2560,32 +2738,6 @@
       "速度训练"
     ],
     "tips": "变向前降低重心，触线转身时内侧脚先制动。"
-  },
-  {
-    "id": "double-unders",
-    "name": "跳绳双摇",
-    "aliases": [
-      "双摇",
-      "Double Unders"
-    ],
-    "type": "neuromotor",
-    "method": "agility-coordination",
-    "group": "敏捷",
-    "summary": "一次起跳绳子绕脚两周，考验弹跳、节奏与协调。",
-    "muscles": [
-      "小腿",
-      "股四头肌",
-      "肩部",
-      "核心"
-    ],
-    "impact": "高",
-    "intensity": "高",
-    "suitableFor": [
-      "CrossFit",
-      "协调进阶",
-      "心肺提升"
-    ],
-    "tips": "用手腕摇绳而非甩臂，跳起高度略高于单摇即可。"
   },
   {
     "id": "eyes-closed-single-leg",
@@ -2650,7 +2802,7 @@
     "summary": "单腿站立向多方向轻触地面，重建踝关节位置觉。",
     "muscles": [
       "踝稳定肌",
-      "小腿",
+      "小腿三头肌",
       "臀中肌"
     ],
     "impact": "低",

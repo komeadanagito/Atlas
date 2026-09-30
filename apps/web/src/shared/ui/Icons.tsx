@@ -1,10 +1,17 @@
 import type { ReactNode } from "react";
 import {
   Activity,
+  ArrowDown,
   ArrowRight,
+  ArrowUp,
   BookOpen,
   CalendarDays,
   CalendarFold,
+  Check,
+  Copy,
+  MessageSquarePlus,
+  PanelLeft,
+  Square,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
@@ -12,7 +19,10 @@ import {
   Clock,
   Eye,
   EyeOff,
+  Layers,
+  LayoutGrid,
   LibraryBig,
+  List,
   LocateFixed,
   LockKeyhole,
   LogOut,
@@ -20,6 +30,7 @@ import {
   NotebookPen,
   Plus,
   RotateCcw,
+  Search,
   ShieldCheck,
   Sparkles,
   Trash,
@@ -76,6 +87,18 @@ export const IconArrowRight = wrapIcon(ArrowRight);
 export const IconSignOut = wrapIcon(LogOut);
 export const IconPlus = wrapIcon(Plus);
 export const IconMinus = wrapIcon(Minus);
+export const IconSend = wrapIcon(ArrowUp);
+export const IconStop = wrapIcon(Square);
+export const IconCopy = wrapIcon(Copy);
+export const IconCheck = wrapIcon(Check);
+export const IconNewChat = wrapIcon(MessageSquarePlus);
+export const IconSidebar = wrapIcon(PanelLeft);
+export const IconSearch = wrapIcon(Search);
+export const IconArrowDown = wrapIcon(ArrowDown);
+export const IconArrowUp = wrapIcon(ArrowUp);
+export const IconLayers = wrapIcon(Layers);
+export const IconGrid = wrapIcon(LayoutGrid);
+export const IconList = wrapIcon(List);
 
 export const KIND_ICON: Record<KitModuleId, (props: IconProps) => ReactNode> = {
   fitness: IconFitness,

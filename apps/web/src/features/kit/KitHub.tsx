@@ -18,7 +18,8 @@ const trackPointer = (event: PointerEvent<HTMLButtonElement>) => {
 };
 
 export const KitHub = ({ onOpen }: Props) => (
-  <main aria-label="百宝箱" className="max-w-5xl pb-6">
+  // Content-level clearance too: ring, rounded corners, hover lift and shadow survive any outer clip edge.
+  <main aria-label="百宝箱" className="max-w-5xl px-1 pt-3 pb-6">
     <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
       {KIT_MODULES.map((item, index) => {
         const Icon = KIND_ICON[item.id];
@@ -28,7 +29,7 @@ export const KitHub = ({ onOpen }: Props) => (
               type="button"
               onClick={() => onOpen(item.id)}
               onPointerMove={trackPointer}
-              className="kit-tile group flex h-36 w-full flex-col justify-between rounded-2xl bg-white p-5 text-left ring-1 ring-[var(--line)] transition-[box-shadow,transform] duration-300 ease-[var(--ease)] hover:-translate-y-1 hover:shadow-[var(--shadow-lg)] active:translate-y-0 active:scale-[0.99] sm:h-40"
+              className="kit-tile group flex h-36 w-full flex-col justify-between rounded-2xl border border-[var(--line)] bg-white p-5 text-left transition-[box-shadow,transform] duration-300 ease-[var(--ease)] hover:-translate-y-1 hover:shadow-[var(--shadow-lg)] active:translate-y-0 active:scale-[0.99] sm:h-40"
             >
               <span className="flex items-start justify-between">
                 {/* Monochrome by default; the module color only appears on hover. */}

@@ -20,7 +20,7 @@ const REVEAL =
 
 export const WeekBoard = ({ days, items, selected, onSelect, onOpenDay }: Props) => (
   <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0 soft-scroll pb-2">
-    <div className="grid min-w-[48rem] grid-cols-7 divide-x divide-[var(--line-soft)] overflow-hidden rounded-2xl bg-white ring-1 ring-[var(--line)] sm:min-w-0">
+    <div className="grid min-w-[48rem] grid-cols-7 divide-x divide-[var(--line-soft)] overflow-hidden rounded-2xl border border-[var(--line)] bg-white sm:min-w-0">
       {days.map((day, index) => {
         const active = day.date === selected;
         const dayItems = itemsOn(items, day.date);
